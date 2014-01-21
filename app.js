@@ -2,12 +2,12 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var routes = require('./routes');
-var http = require('http');
-var path = require('path');
-
-var app = express();
+var express = require('express')
+  , app = express()
+  , routes = require('./routes')
+  , http = require('http')
+  , path = require('path')
+  ;
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -20,8 +20,18 @@ app.use(express.methodOverride());
 app.use(express.cookieParser('cookie_monster'));
 app.use(express.session());
 app.use(app.router);
-app.use(require('less-middleware')({ src: path.join(__dirname, 'public') }));
+app.use(require('less-middleware')({ 
+  src: path.join(__dirname, 'public'),
+  yuicompress: true,
+  optimization: 2
+}));
+ 
 app.use(express.static(path.join(__dirname, 'public')));
+app.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 // development only
 if ('development' == app.get('env')) {
