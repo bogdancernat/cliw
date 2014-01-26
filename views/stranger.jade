@@ -8,23 +8,28 @@ html
       div.navbar-header
         a.navbar-brand(href='#') Cosé
     div.container
-      div.row
-        div.col-md-8
-          div.col-md-4
-          a(href="/auth/facebook") Facebook
-          a(href="/auth/twitter") Twitter
-          a(href="/auth/google") Google
-          div.col-md-4
-            form(action="/login",method="POST")
+      div.row.authWraper
+        div.col-md-3.col-md-offset-2
+          a(href="/auth/facebook")#facebookLogin.autoLogin 
+          a(href="/auth/twitter")#twitterLogin.autoLogin
+          a(href="/auth/google")#googleLogin.autoLogin
+        div.col-md-2.authForms
+          div.slideForms
+            form(action="/login",method="POST")#form-login
               input(type="email", placeholder="email", name="email").form-control
               input(type="password", placeholder="password", name="password").form-control
               button(type="submit").btn.btn-primary log in
-          div.col-md-4.signupForm
-            form(action="/signup",method="POST")
+              p Don't have an account? 
+                a(href="#signup") 
+                  strong Sign Up
+            form(action="/signup",method="POST")#form-signup
               input(type="email", placeholder="email", name="email").form-control
               input(type="password", placeholder="password", name="password").form-control
               input(type="password", placeholder="password", name="passwordRetype").form-control
               button(type="submit").btn.btn-primary sign up
+              p Already have an acoount?
+                a(href="#signin")
+                  strong Sign In
 
     script(src="/javascripts/jquery-2.0.3.min.js")
     script(src="/javascripts/bootstrap.min.js")
