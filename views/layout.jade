@@ -2,6 +2,41 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/style.min.css')
   body
+    nav.navbar.navbar-default(role='navigation')
+      div.navbar-header
+        button.navbar-toggle(type='button', data-toggle='collapse', data-target='#nav-bar')
+          span.sr-only Toggle navigation
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href='#') Cose
+      div#nav-bar.collapse.navbar-collapse
+        ul.nav.navbar-nav.navbar-right
+          li.dropdown
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              | hello, 
+              =data.user.email
+              i.caret
+            ul.dropdown-menu
+              li
+                a(href='#') Action
+              li
+                a(href='#') Another action
+              li
+                a(href='#') Something else here
+              li.divider
+              li
+                a(href='/logout') Log out
     block content
+
+  script(src="/javascripts/jquery-2.0.3.min.js")
+  script(src="/javascripts/bootstrap.min.js")
+
+  if (data.pageScripts)
+    each script in data.pageScripts
+      script(src="/javascripts/"+script+".js")
+
+
+
