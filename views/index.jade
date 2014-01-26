@@ -3,7 +3,10 @@ extends layout
 block content
   div.row
     div.col-md-7.col-md-offset-2.storyboard-listing
-      div.create-wrapper
-        input(type="text").form-control#new-storyboard
-        button().btn.btn-primary#create-storyboard
+      div.row.create-wrapper
+        div.col-md-10.input-wrapper
+          input(type="text").form-control#new-storyboard
+        div.col-md-2.button-wrapper
+          button().btn.btn-primary#create-storyboard
+            | +
     div.col-md-3.storyboard-filters

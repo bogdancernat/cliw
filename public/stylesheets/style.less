@@ -13,6 +13,24 @@ body {
   border-right: 1px solid #eee;
   min-height: 700px;
   // background: #efefef;
+
+  .create-wrapper{
+    
+    .button-wrapper{
+      position: relative;
+      @button_size: 34px;
+      #create-storyboard{
+        position: absolute;
+        border-radius: 50%;
+        padding: 6px;
+        width: @button_size;
+        height: @button_size;
+        line-height: 1;
+        margin-left: 50%;
+        left: -@button_size/2;
+      }
+    }
+  }
 }
 
 .storyboard-filters{
