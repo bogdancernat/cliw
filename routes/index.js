@@ -10,7 +10,7 @@ exports.index = function(req, res){
   data.user = req.user;
   if (req.isAuthenticated()){
     res.render('index', { 
-      title: 'Cosé - Collaborative board', 
+      title: 'Cosé - Collaborative board',
       data: data 
     });
   } else {
