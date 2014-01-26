@@ -2,5 +2,8 @@ extends layout
 
 block content
   div.row
-    div.col-md-6.col-md-offset-2
-    div(style="background: red").col-md-4
+    div.col-md-7.col-md-offset-2.storyboard-listing
+      div.create-wrapper
+        input(type="text").form-control#new-storyboard
+        button().btn.btn-primary#create-storyboard
+    div.col-md-3.storyboard-filters

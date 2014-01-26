@@ -17,7 +17,6 @@
     "passport-google-oauth": "~0.1.5",
     "request": "~2.33.0",
     "connect-couchdb": "~0.4.1",
-    "validator": "~3.2.0",
-    "console-trace": "~0.2.1"
+    "validator": "~3.2.0"
   }
 }
