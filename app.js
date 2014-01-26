@@ -21,6 +21,7 @@ var express    = require('express')
   , path     = require('path')
   , passport = require('passport')
   , auth     = require('./routes/auth')(passport)
+  , storyboards = require('./routes/storyboards')
   ;
 
 
@@ -70,6 +71,9 @@ app.get('/auth/facebook/callback', auth.facebookAuthCallback);
 // posts
 app.post('/login', auth.loginEmail);
 app.post('/signup', auth.signupEmail);
+
+// create new storyboard 
+app.post('/create', auth.isAuthenticatedPOST, storyboards.create);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

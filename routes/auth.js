@@ -19,6 +19,13 @@ module.exports = function (passport) {
         res.redirect('/');
       }
     },
+    isAuthenticatedPOST: function (req, res, next) {
+      if(req.isAuthenticated()) {
+        return next();
+      } else {
+        res.send(401);
+      }
+    },
     logout: function (req, res) {
       req.logout();
       res.redirect('/');
