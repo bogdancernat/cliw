@@ -3,7 +3,7 @@ var db               = require('./db')
   , facebookStrategy = require('passport-facebook').Strategy
   , twitterStrategy  = require('passport-twitter').Strategy
   , googleStrategy   = require('passport-google-oauth').OAuth2Strategy
-  , bcrypt           = require('bcrypt')
+  // , bcrypt           = require('bcrypt')
   , configAuth       = require('./config')
   ;
 
@@ -32,8 +32,12 @@ module.exports = function (passport) {
         var user        = db.getUserModel();
         user.email      = email;
         user.created_on = +(new Date());
-
-        bcrypt.genSalt(10, function (err, salt) {
+        user.password   = password;
+        db.insert(user, function (data) {
+          // console.log('inserting into db');
+          done(null, data);
+        });
+      /*  bcrypt.genSalt(10, function (err, salt) {
           bcrypt.hash(password, salt, function (err, crypted) {
             user.password = crypted;
 
@@ -43,7 +47,7 @@ module.exports = function (passport) {
             });
 
           });
-        });
+        });*/
       }
     });
   }));
@@ -56,13 +60,18 @@ module.exports = function (passport) {
       if(!doc) {
         done(null, false);
       } else {
-        bcrypt.compare(password, doc.password, function (err, match) {
-          if(match) {
-            done(null, doc);
-          } else {
-            done(null, false);
-          }
-        });
+        if(password == doc.password){
+          done(null, doc);
+        } else {
+          done(null, false);
+        }
+        // bcrypt.compare(password, doc.password, function (err, match) {
+        //   if(match) {
+        //     done(null, doc);
+        //   } else {
+        //     done(null, false);
+        //   }
+        // });
       }
     });
   }));
