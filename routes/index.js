@@ -6,7 +6,7 @@
 exports.index = function(req, res){
   var data = {};
   // data.pageScripts = ['bootstrap.min'];
-  console.log(req.user);
+  // console.log(req.user);
   data.user = req.user;
   if (req.isAuthenticated()){
     res.render('index', { 

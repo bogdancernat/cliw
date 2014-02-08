@@ -32,6 +32,12 @@ var user = {
   created_on             : null
 };
 
+var project = {
+  type      : 'project',
+  owner     : null,
+  short_url : null,
+  created_on: null
+}
 
 dbServer.db.get(dbName, function (err) {
   if (err) {
