@@ -83,45 +83,45 @@ $(document).ready(function(){
         $('.list').width(temWi + 1);
     })
 
-    function cancelFullScreen(el) {
-      var requestMethod = el.cancelFullScreen||el.webkitCancelFullScreen||el.mozCancelFullScreen||el.exitFullscreen;
-      if (requestMethod) { // cancel full screen.
-          requestMethod.call(el);
-      } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-          var wscript = new ActiveXObject("WScript.Shell");
-          if (wscript !== null) {
-              wscript.SendKeys("{F11}");
-          }
+  function cancelFullScreen(el) {
+    var requestMethod = el.cancelFullScreen||el.webkitCancelFullScreen||el.mozCancelFullScreen||el.exitFullscreen;
+    if (requestMethod) { // cancel full screen.
+      requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+      var wscript = new ActiveXObject("WScript.Shell");
+      if (wscript !== null) {
+        wscript.SendKeys("{F11}");
       }
     }
+  }
 
-        function requestFullScreen(el) {
-          // alert(2)
-            // Supports most browsers and their versions.
-            var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
+  function requestFullScreen(el) {
+  // alert(2)
+    // Supports most browsers and their versions.
+    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullScreen;
 
-            if (requestMethod) { // Native full screen.
-                requestMethod.call(el);
-            } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-                var wscript = new ActiveXObject("WScript.Shell");
-                if (wscript !== null) {
-                    wscript.SendKeys("{F11}");
-                }
-            }
-            return false
-        }
+    if (requestMethod) { // Native full screen.
+      requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+      var wscript = new ActiveXObject("WScript.Shell");
+      if (wscript !== null) {
+        wscript.SendKeys("{F11}");
+      }
+    }
+    return false
+  }
 
-        function toggleFull() {
-            var elem = document.body; // Make the body go full screen.
-            var isInFullScreen = (document.fullScreenElement && document.fullScreenElement !== null) ||  (document.mozFullScreen || document.webkitIsFullScreen);
+  function toggleFull() {
+    var elem = document.body; // Make the body go full screen.
+    var isInFullScreen = (document.fullScreenElement && document.fullScreenElement !== null) ||  (document.mozFullScreen || document.webkitIsFullScreen);
 
-            if (isInFullScreen) {
-                cancelFullScreen(document);
-            } else {
-                requestFullScreen(elem);
-            }
-            return false;
-        }
+    if (isInFullScreen) {
+      cancelFullScreen(document);
+    } else {
+      requestFullScreen(elem);
+    }
+    return false;
+  }
 
   $(document).on('click', '.toFullScreen', function () {
     if(!flag) {
@@ -130,7 +130,7 @@ $(document).ready(function(){
       $(this).find('.glyphicon').addClass('glyphicon-resize-small');
       $('.prj-prev').css({
         'width': '900px',
-        'height': '600px'
+        'height': 900 * 500/800 + 'px'
       });
       $('.frame').css({
         'height': '85%'
