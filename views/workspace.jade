@@ -56,21 +56,28 @@ head
       opacity: 0.4;
     }
 body
-  div.canvas-wrapper
-    canvas#canvas
-  div.tools
-    span(data-tool="drawRect") RECT
-    span(data-tool="drawLine") LINE
-    span(data-tool="drawCircle") CIRCLE
-  div.colors
-    span(data-color="#bada55")
-    span(data-color="#ffffff")
-    span(data-color="#000000")
-    span(data-color="#ff1122")
-  div.actions
-    span(data-action="fill") FILL
-    span(data-action="border") BORDER
-    span(data-action="remove") REMOVE
+  div.container
+    header
+      div.menu-toggle
+      div.users
+    nav.canvas-tools
+      div.tools
+        span(data-tool="drawRect") RECT
+        span(data-tool="drawLine") LINE
+        span(data-tool="drawCircle") CIRCLE
+      div.colors
+        span(data-color="#bada55")
+        span(data-color="#ffffff")
+        span(data-color="#000000")
+        span(data-color="#ff1122")
+      div.actions
+        span(data-action="fill") FILL
+        span(data-action="border") BORDER
+        span(data-action="remove") REMOVE
+      button.save-project
+    div.workspace-area
+      div.canvas-wrapper
+        canvas(width="800px", height="500px")#canvas
 
   script(src="/javascripts/jquery-2.0.3.min.js")
   script(src="/javascripts/bootstrap.min.js")

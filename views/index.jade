@@ -196,24 +196,12 @@ block content
           div.mousearea2
         div.frame2#nonitembased
           div.slidee
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost adoptatdsfvsdfsf
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost adoptatdsfvsdfsf
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost adoptatdsfvsdfsf
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost adoptatdsfvsdfsf
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost adoptatdsfvsdfsf
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost invitat
-            div.alert.alert-info Ai fost alohaa
+            if (data.unfinishedProjects)
+              each project in data.unfinishedProjects
+                a(href="/workspace?b="+project.url)
+                  div.alert.alert-info 
+                    strong=project.name
+                    |  project is unfinished!
       hr
       div.prj-filters
         div.prj-by-name

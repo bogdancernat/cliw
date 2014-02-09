@@ -1,12 +1,13 @@
 var canvasObjects = {};
 
 $(document).ready(function(){
+  resizeElements();
   var mySocket
     , lastId = 0
     , socket = io.connect('http://localhost')
     , canvas = new fabric.Canvas('canvas',{
-        width: 700,
-        height: 400
+        width: 800,
+        height: 500
       })
     , actionCreate   = null
     , selectedColor  = "#000000"
@@ -182,8 +183,6 @@ $(document).ready(function(){
 
   });
 
-
-
   canvas.on("mouse:down", prepareDrawingElement);
   canvas.on("mouse:move", drawElement);
   canvas.on("mouse:up", placeElement);
@@ -354,31 +353,10 @@ $(document).ready(function(){
     return lastId;
   }
 
-  // function getNumericStyleProperty(style, prop){
-  //   return parseInt(style.getPropertyValue(prop),10) ;
-  // }
+  function resizeElements(){
+    $('.container').css("height",window.innerHeight);
+  }
 
-  // function getElementPosition(e) {
-  //   var x = 0, y = 0;
-  //   var inner = true ;
-  //   do {
-  //     x += e.offsetLeft;
-  //     y += e.offsetTop;
-  //     var style = getComputedStyle(e,null) ;
-  //     var borderTop = getNumericStyleProperty(style,"border-top-width") ;
-  //     var borderLeft = getNumericStyleProperty(style,"border-left-width") ;
-  //     y += borderTop ;
-  //     x += borderLeft ;
-  //     if (inner){
-  //       var paddingTop = getNumericStyleProperty(style,"padding-top") ;
-  //       var paddingLeft = getNumericStyleProperty(style,"padding-left") ;
-  //       y += paddingTop ;
-  //       x += paddingLeft ;
-  //     }
-  //     inner = false ;
-  //   } while (e = e.offsetParent);
-  //   return { x: x, y: y };
-  // }
-
+  $(window).resize(resizeElements);
 });
 

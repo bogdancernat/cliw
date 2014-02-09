@@ -135,6 +135,13 @@ function addDefaultData() {
           }
         }
       },
+      'projects_open_by_owner':{
+        'map': function (doc) {
+          if(doc.type=='project' && doc.closed == false) {
+            emit(doc.owner, doc);
+          }
+        }
+      }
     }
   };
 
@@ -230,6 +237,27 @@ exports.getProjectById = function (url, callback) {
     }
   });
 }
+
+exports.getUnfinishedProjects = function (callback){
+  db.view('cose-views', 'projects_open_by_owner', function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows);
+    } else {
+      callback(null);
+    }
+  });
+}
+
+exports.getOwnerUnfinishedProjects = function (owner, callback){
+  db.view('cose-views', 'projects_open_by_owner', {key: owner}, function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows);
+    } else {
+      callback([]);
+    }
+  });
+}
+
 /* END Get projects */
 
 exports.insert = function (obj, callback) {
