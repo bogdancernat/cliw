@@ -5,14 +5,14 @@
 
 exports.index = function(req, res){
   var data = {};
-  data.pageScripts = ['project-listing'];
-  data.pageStyles = ['index.min'];
+  data.pageScripts = ['project-preview'];
+  data.pageStyles = ['preview.min'];
   // console.log(req.user);
   data.user = req.user;
   if (req.isAuthenticated()){
-    res.render('index', { 
+    res.render('preview', { 
       title: 'Cosé - Collaborative board',
-      data : data 
+      data: data 
     });
   } else {
     res.render('stranger', { 
@@ -20,4 +20,3 @@ exports.index = function(req, res){
     });
   }
 };
-

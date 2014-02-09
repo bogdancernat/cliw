@@ -1,0 +1,80 @@
+doctype html
+//- TODO: Don't forget to set lang !!
+//if lt IE 7
+  |<html class="no-js lt-ie9 lt-ie8 lt-ie7">
+//if IE 7
+  |<html class="no-js lt-ie9 lt-ie8">
+//if IE 8
+  |<html class="no-js lt-ie9">
+//if gt IE 8
+  |<!--><html class="no-js"><!--
+head
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  title=title
+  meta(name='description', content='')
+  meta(name='viewport', content='width=device-width, initial-scale=1')
+  link(rel="stylesheet", type="text/css", href="stylesheets/workspace.min.css")
+  style.
+    .selected{
+      opacity: 0.4;
+    }
+    .colors,.tools,.actions{
+      padding: 10px;
+      background: black;
+      overflow: auto;
+    }
+    .colors span{
+      border: 1px solid white;
+      padding: 0 10px;
+      height: 20px;
+      cursor: pointer;
+      float: left;
+      margin-right: 5px;
+    }
+    .tools span{
+      background: white;
+      padding: 0 10px;
+      height: 20px;
+      cursor: pointer;
+      float: left;
+      margin-right: 5px;
+      text-align: center;
+      line-height: 22px;
+    }
+    .actions span{
+      background: white;
+      padding: 0 10px;
+      height: 20px;
+      cursor: pointer;
+      float: left;
+      margin-right: 5px;
+      text-align: center;
+      line-height: 22px;
+    }
+    .actions span:active{
+      opacity: 0.4;
+    }
+body
+  div.canvas-wrapper
+    canvas#canvas
+  div.tools
+    span(data-tool="drawRect") RECT
+    span(data-tool="drawLine") LINE
+    span(data-tool="drawCircle") CIRCLE
+  div.colors
+    span(data-color="#bada55")
+    span(data-color="#ffffff")
+    span(data-color="#000000")
+    span(data-color="#ff1122")
+  div.actions
+    span(data-action="fill") FILL
+    span(data-action="border") BORDER
+    span(data-action="remove") REMOVE
+
+  script(src="/javascripts/jquery-2.0.3.min.js")
+  script(src="/javascripts/bootstrap.min.js")
+  script(src="/socket.io/socket.io.js")
+  script(src="/javascripts/fabric.min.js")
+  script(src="/javascripts/workspace.js")
+

@@ -3,6 +3,9 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.min.css')
+    if (data.pageStyles)
+      each style in data.pageStyles
+        link(rel='stylesheet', href='/stylesheets/' + style + '.css')
   body
     nav.navbar.navbar-default(role='navigation')
       div.navbar-header
@@ -33,7 +36,7 @@ html
 
   script(src="/javascripts/jquery-2.0.3.min.js")
   script(src="/javascripts/bootstrap.min.js")
-  script(src="/javascripts/project-listing.js")
+  script(src="/javascripts/sly.min.js")
 
   if (data.pageScripts)
     each script in data.pageScripts

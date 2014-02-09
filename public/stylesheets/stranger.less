@@ -4,30 +4,46 @@ body {
   font-family: "Open Sans", "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-.auth-menu{
-  width: 400px;
-  .half{
-    float: left;
-    width: 50%;
-    padding: 5px;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-  }
-  input{
-    margin-bottom: 3px;
-  }
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
-.authWraper {
-  margin-top: 15%;
-}
-
-.authForms {
+.auth-wrapper {
+  width: 60%;
+  margin-left: 20%;
+  height: 60%;
+  margin-top: 10%;
   position: relative;
-  overflow: hidden;
-  height: 200px;
-  width: 19%;
+  // border: 1px solid blue;
+  .media-login {
+    width: 45%;
+    height:50%;
+    float: left; 
+    // background-color: red;
+    position: relative; 
+  }
+  .manual-login {
+    width: 45%;
+    height: 100%;
+    float: left;
+    margin-left: 5%;
+    // background-color: green;
+    position: relative;
+    overflow: hidden;
+  }
+}
+
+.autoLogin {
+  display: block;
+  width: 50%;
+  margin-left: 40%;
+  height: 25%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .slideForms {
@@ -35,34 +51,47 @@ body {
   top: 0;
   left: 0;
   width: 220%;
+  height: 100%;
   transition: 1s;
-  input{
-    margin-bottom: 3px;
+}
+ #form-login {
+  width: 40%;
+  float: left;
+  height: 100%;
+  font-size: 1.5em;
+  input {
+    height: 10%;
+    margin-bottom: 2%;
+
+  }
+  button {
+    height: 10%;
+    width: 40%;
+    margin-bottom: 2%;
+  }
+}
+#form-signup {
+  float: left;
+  margin-left: 10%;
+  width: 40%;
+  height: 100%;
+  font-size: 1.5em;
+  input {
+    height: 10%;
+    margin-bottom: 2%;
+
+  }
+  button {
+    height: 10%;
+    width: 40%;
+    margin-bottom: 2%;
   }
 }
 
 .formTransition {
-  left: -112%;
+  left: -110%;
 }
 
-#form-login {
-  width: 45%;
-  float: left;
-}
-#form-signup {
-  margin-left: 30px;
-  float: left;
-  width: 45%;
-}
-.autoLogin {
-  display: block;
-  width: 180px;
-  height: 40px;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-  margin: 0 auto;
-}
 #facebookLogin {
   background-image: url("../images/facebook.png");
 }
@@ -73,6 +102,6 @@ body {
   background-image: url("../images/google.png");
 }
 
-.autoLogin:hover {
-  opacity: 0.8;
-}
+// .autoLogin:hover {
+//   opacity: 0.8;
+// }

@@ -33,10 +33,13 @@ var user = {
 };
 
 var project = {
-  type      : 'project',
-  owner     : null,
-  short_url : null,
-  created_on: null
+  type         : 'project',
+  owner        : null,
+  short_url    : null,
+  collaborators: [],
+  closed       : false,
+  active       : false,
+  created_on   : null,
 }
 
 dbServer.db.get(dbName, function (err) {
@@ -62,8 +65,7 @@ dbServer.db.get(dbName, function (err) {
 });
 
 function addDefaultData() {
-
-  var design_doc = {
+  var design_doc_auth = {
     'views':{
       'users_key_email':{
         'map': function (doc) {
@@ -106,13 +108,46 @@ function addDefaultData() {
   db.get('_design/multiauth-views', null, function (err, body) {
     if (!err) {
       db.destroy('_design/multiauth-views',body._rev,function (err2, body2) {
-        db.insert(design_doc,'_design/multiauth-views',function (err3, res) {
-          console.log("Created views.")
+        db.insert(design_doc_auth,'_design/multiauth-views',function (err3, res) {
+          console.log("Created views for auth.")
         });
       });
     } else {
-      db.insert(design_doc,'_design/multiauth-views',function (err3, res) {
-        console.log("Created views.")
+      db.insert(design_doc_auth,'_design/multiauth-views',function (err3, res) {
+        console.log("Created views for auth.")
+      });
+    }
+  });
+
+  var design_doc = {
+    "views":{
+      'projects':{
+        'map': function (doc) {
+          if(doc.type=='project') {
+            emit(doc.short_url, doc);
+          }
+        }
+      },
+      'projects_by_id':{
+        'map': function (doc) {
+          if(doc.type=='project') {
+            emit(doc._id, doc);
+          }
+        }
+      },
+    }
+  };
+
+  db.get('_design/cose-views', null, function (err, body) {
+    if (!err) {
+      db.destroy('_design/cose-views',body._rev,function (err2, body2) {
+        db.insert(design_doc,'_design/cose-views',function (err3, res) {
+          console.log("Created views for data.")
+        });
+      });
+    } else {
+      db.insert(design_doc,'_design/cose-views',function (err3, res) {
+        console.log("Created views for data.")
       });
     }
   });
@@ -121,7 +156,9 @@ function addDefaultData() {
 exports.getUserModel = function () {
   return JSON.parse(JSON.stringify(user));
 }
-
+exports.getProjectModel = function () {
+  return JSON.parse(JSON.stringify(project));
+}
 /* Get user/users by various keys */
 
 exports.getUser = function (email, callback) {
@@ -143,6 +180,7 @@ exports.getUserById = function (id, callback) {
     }
   });
 }
+
 exports.getUserByFbId = function (fb_id, callback) {
   db.view('multiauth-views', 'users_key_fb_id', {key: fb_id}, function (err, body) {
     if(!err && body.rows.length) {
@@ -171,6 +209,28 @@ exports.getUserByGoogleId = function (google_id, callback) {
   });
 }
 /* END Get user/users by various keys */
+
+/* Get projects */
+
+exports.getProject = function (url, callback) {
+  db.view('cose-views', 'projects', {key: url}, function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows[0].value);
+    } else {
+      callback(null);
+    }
+  });
+}
+exports.getProjectById = function (url, callback) {
+  db.view('cose-views', 'projects_by_id', {key: url}, function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows[0].value);
+    } else {
+      callback(null);
+    }
+  });
+}
+/* END Get projects */
 
 exports.insert = function (obj, callback) {
   db.insert(obj, function (err, body, header) {
