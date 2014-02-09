@@ -117,12 +117,13 @@ header{
   height: ~"calc(100% - "@header_height~")";
   position: relative;
   background: rgba(47,79,79,0.4);
-
+  
   .colors{
     width: @canvas_tools_width - @margin_left;
     margin-left: @margin_left;
     margin-top: 5px;
     overflow: auto;
+    padding-top: 4px;
     padding-bottom: 4px;
     span{
       width: 20px;
@@ -140,11 +141,23 @@ header{
         width: 26px;
         height: 26px;
         margin: 0;
-        box-shadow: 0px 1px 1px #232323;
+        box-shadow: 0px 0px 3px darkslategray;
       }
     }
   }
+  .tools{
+    width: @canvas_tools_width - @margin_left;
+    overflow: auto;
+    padding-bottom: 4px;
 
+  }
+
+  .actions{
+    width: @canvas_tools_width - @margin_left;
+    overflow: auto;
+    padding-bottom: 4px;
+
+  }
   .save-project{
     position: absolute;
     bottom:5px;
