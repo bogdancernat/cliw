@@ -17,13 +17,14 @@ $(document).ready(function(){
       speed: 300,
       elasticBounds: 1,
       easing: 'swing',
-      dragHandle: 1,s
+      dragHandle: 1,
       dynamicHandle: 1,
       clickBar: 1,
       // Buttons
       prev: $wrap.find('.prev'),
       next: $wrap.find('.next')
     };
+
 
   var sly = new Sly($frame, option).init();
 
@@ -60,7 +61,7 @@ $(document).ready(function(){
       var w_w = window.innerWidth
         , w = w_w - 80
         , h = w * ratio
-        console.log(w,h);
+        // console.log(w,h);
         if(w_w < 850) {    
         $('.prj-prev').css({ 
           'width': w + 'px',

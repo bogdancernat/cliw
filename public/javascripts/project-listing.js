@@ -44,4 +44,29 @@ $(document).ready(function(){
     clickBar: 1,
   });
 
+  $(window).resize(function() {
+
+      var a = 800
+        , b = 500
+        , ratio = b/a
+        ;
+      // var w_w = window.innerWidth
+      //   , w = w_w - 80
+      //   , h = w * ratio
+        // console.log($('.prj-capture').width());
+        if($('.prj-capture').width() < 800) { 
+          var h =  $('.prj-capture').width() * ratio;
+          $('.prj-capture > img').css({ 
+            'width': $('.prj-capture').width() + 'px',
+            'height': h +'px'
+          });
+        }
+        // }else if(w_w > 850){
+        //   $('.prj-capture > img').css({ 
+        //   'width': '800px',
+        //   'height': '500px'
+        // });
+        // }
+    })
+
 });

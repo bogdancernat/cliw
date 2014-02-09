@@ -1,17 +1,17 @@
 
 @content_width: 80%;
 @right_width: 20%;
-@prj_img_width: 700px;
+@prj_img_width: 800px;
 
 
 
 .wrapper {
   width: 100%;
-  height: 92%;
+  height: 80%;
 }
 
 .storyboard-listing {
-  width: 65%;
+  width: 75%;
   height: 100%;
   float: left;
   position: relative;
@@ -19,12 +19,12 @@
 }
 
 .storyboard-filters {
-  width: 30%;
+  width: 24%;
   height: 100%;
   float: left;
-  margin-left: 5%;
+  margin-left: 1%;
   box-sizing:border-box;
-  border-left: 1px solid #f3f3f3;
+  // border-left: 1px solid #f3f3f3;
   // background-color: green;
 }
  .input-wrapper {
@@ -51,17 +51,16 @@
 .wrap {
   position: relative;
   width: 100%;
-  height: 80%;
-  margin-top: 8%;
+  height: 89%;
+  margin-top: 1%;
   // left: 10%;
 }
 /* Frame */
 .frame {
-  width: 70%;
-  height: 90%;
+  width: 95%;
+  height: 100%;
   overflow: hidden;
   position: absolute;
-  left: 15%;
 }
 
 .frame ul.items {
@@ -75,7 +74,7 @@
 .frame ul.items li.prj {
   float: left;
   width: 100%;
-  height: 500px;
+  height: 600px;
   // padding: 0;
   // background: #f3f3f3;
   color: #ddd;
@@ -95,7 +94,7 @@
 /* Scrollbar */
 .scrollbar {
   position: absolute;
-  right: 15%;
+  right: 1%;
   width: 2px;
   height: 90%;
   background: #ccc;
@@ -136,30 +135,10 @@
   height: 100%;
 }
 
-.prj-wrap-title {
-  width: 100%;
-  height: 8%;
-  // background-color: red;
-  text-align: left;
-  position: relative;
-  .glyphicon-play-circle {
-    font-size: 2.5em;
-    line-height: 100%;
-    text-decoration: none;
-  }
-}
-.prj-wrap-date {
-  width: 79%;
-  height: 5%;
-  text-align: right;
-  color: #000;
-  font-size: 16px;
-  // background-color: green;
-}
 .prj-capture {
-  width: 90%;
-  height: 83%;
-  margin-left: 10%;
+  width: 100%;
+  height: 100%;
+  // margin-left: 10%;
   // background-color: blue;
   img {
     width: @prj_img_width;
@@ -167,35 +146,54 @@
   }
 }
 
-.prj-play {
-  float: left;
-  width: 6%;
-  display: block;
-}
-.prj-title {
-  float: left;
-  width: 90%;
-  height: 100%;
-  font-family: sans-serif;
-  color: #000;
-  font-size:22px;
-  margin: 0;
-  padding: 0;
-  margin-left: 3%;
-  text-decoration: none;
-  a{
+.prj-wrap-title {
+  width: 95%;
+  height: 8%;
+  // background-color: red;
+  text-align: left;
+  position: relative;
+  margin-left: 5%;
+  .glyphicon-play-circle {
+    font-size: 2.5em;
+    line-height: 100%;
     text-decoration: none;
-    color: #000;
-    line-height: 1.7;
-    // -moz-transition:color 1s, font-weight 1s easy-in;
-    // -webkit-transition: color 1s, font-weight 1s easy-in;
-    // -o-transition: color 1s, font-weight 1s easy-in;
-    // transition: color 1s, font-weight 1s easy-in;
   }
-  // a:hover {
-  //   color: blue;
-  //   font-weight: bold;
-  // }
+  .prj-play {
+    float: left;
+    width: 6%;
+    display: block;
+  }
+  .prj-title {
+    float: left;
+    width: 90%;
+    height: 100%;
+    font-family: sans-serif;
+    color: #000;
+    font-size:22px;
+    margin: 0;
+    padding: 0;
+    margin-left: 3%;
+    text-decoration: none;
+    a{
+      text-decoration: none;
+      color: #000;
+      line-height: 1.7;
+      // -moz-transition:color 1s, font-weight 1s easy-in;
+      // -webkit-transition: color 1s, font-weight 1s easy-in;
+      // -o-transition: color 1s, font-weight 1s easy-in;
+      // transition: color 1s, font-weight 1s easy-in;
+      .date {
+        float: right;
+        line-height: 2.5;
+        color: #000;
+        font-size: 16px;
+      }
+    }
+    // a:hover {
+    //   color: blue;
+    //   font-weight: bold;
+    // }
+  }
 }
 
 .prj-filters {
@@ -203,19 +201,29 @@
   height: 20%;
   margin-top: 5%;
   .prj-by-date {
-    width: 100%;
-    height: 50%;
+    width: 85%;
+    height: 48%;
+    margin-top: 4%;
 
   }
   .prj-by-name {
-    width: 100%;
-    height: 50%;
+    width: 85%;
+    height: 48%;
   }
 }
 
+
+#stb-filter-name {
+  width: 100%;
+  // margin-left: 10%;
+}
+#stb-filter-date {
+  width: 100%;
+  // margin-left: 10%;
+}
 .user-alerts {
   width: 100%;
-  height:  50%;
+  height:  67%;
   position: relative;
   margin-top: 5%;
 
@@ -225,15 +233,6 @@
   height: 100%;
   overflow: hidden;
   position: absolute;
-}
-
-#stb-filter-name {
-  width: 60%;
-  // margin-left: 10%;
-}
-#stb-filter-date {
-  width: 60%;
-  // margin-left: 10%;
 }
 
 
