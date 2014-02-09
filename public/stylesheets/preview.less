@@ -1,21 +1,23 @@
 .wrapper {
   width: 100%;
-  height: 90%;
+  height: 86%;
+  position: relative;
 }
 
 .wrap {
   position: relative;
-  margin: 3em 0;
+  // margin: 3em 0;
   width: 100%;
-  top: 10%;
-  height: 80%;
+  // top: 10%;
+  height: 95%;
 }
 
 /* Frame */
 .frame {
-  height: 90%;
+  height: 75%;
   // line-height: 250px;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 .frame ul {
   list-style: none;
@@ -27,14 +29,14 @@
 .frame ul li {
   float: left;
   width: 800px;
-  height: 70%;
+  height: 500px;
   margin: 0 1px 0 0;
   padding: 0;
   background: #333;
   color: #ddd;
   text-align: center;
   cursor: pointer;
-}
+} 
 .frame ul li.active {
   color: #fff;
   background: #a03232;
@@ -42,10 +44,13 @@
 
 /* Scrollbar */
 .scrollbar {
-  margin: 0 0 1em 0;
+  // margin: 0 0 1em 0;
   height: 2px;
+  width: 100%;
   background: #ccc;
   line-height: 0;
+  position: absolute;
+  bottom:  8%;
 }
 .scrollbar .handle {
   width: 100px;
@@ -62,35 +67,53 @@
 }
 .controls { 
   text-align: center;
+  position: absolute;
+  width: 100%;
+  bottom: 5%;
+  height: 5%;
   .max-move {
+    width: 220px;
+    margin: 0 auto;
     position: relative;
-    width: 100%;
     .toStart {
-      position: absolute;
-      left: 4%;
-      width: 4%;
+      float: left;
+      position: relative;
+      width: 55px;
+      height: 40px;
+      left: 0;
+      right: 0;
       font-size: 1.5em;
     }
     .toEnd {
-      position: absolute;
-      right: 4%;
-      width: 4%;
+       float: left;
+      position: relative;
+      width: 55px;
+      height: 40px;
+      left: 0;
+      right: 0;
       font-size: 1.5em;
     }
     .toLeft {
-      position: absolute;
-      left: 45%;
-      width: 3%;
-      font-size: 1.4em;
+       float: left;
+      position: relative;
+      width: 55px;
+      height: 40px;
+      left: 0;
+      right: 0;
+      font-size: 1.5em;
     }
     .toRight {
-      position: absolute;
-      right: 45%;
-      width: 3%;
-      font-size: 1.4em;
+       float: left;
+      position: relative;
+      width: 55px;
+      height: 40px;
+      left: 0;
+      right: 0;
+      font-size: 1.5em;
     }
   } 
 }
+
 
 /* Pages */
 // .pages {
