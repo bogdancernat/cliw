@@ -117,46 +117,67 @@ header{
   height: ~"calc(100% - "@header_height~")";
   position: relative;
   background: rgba(47,79,79,0.4);
-  
-  .colors{
-    width: @canvas_tools_width - @margin_left;
+
+  .colors,
+  .tools,
+  .actions,
+  .stock-items{
+    width: @canvas_tools_width - @margin_left - 2px;
     margin-left: @margin_left;
-    margin-top: 5px;
     overflow: auto;
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding: 4px 0px 4px 2px;
     span{
-      width: 20px;
-      height: 20px;
-      float: left;
-      margin: 3px;
-      cursor: pointer;
       @duration: 0.25s;
       -webkit-transition: all @duration ;
          -moz-transition: all @duration ;
           -ms-transition: all @duration ;
            -o-transition: all @duration ;
               transition: all @duration ;
+      box-shadow: 0px 0px 1px darkslategray;
+      float: left;
+      margin: 3px;
+      cursor: pointer;
+      &.selected{
+        box-shadow: 0px 0px 3px darkslategray;
+        margin: 0;
+      }
+
+    }
+  }
+  .colors{
+    margin-top: 5px;
+    span{
+      width: 20px;
+      height: 20px;
       &.selected{
         width: 26px;
         height: 26px;
-        margin: 0;
-        box-shadow: 0px 0px 3px darkslategray;
       }
     }
   }
   .tools{
-    width: @canvas_tools_width - @margin_left;
-    overflow: auto;
-    padding-bottom: 4px;
-
+    span{
+      width: 30px;
+      height: 30px;
+      &.selected{
+        width: 36px;
+        height: 36px;
+      }
+    }
   }
 
   .actions{
-    width: @canvas_tools_width - @margin_left;
-    overflow: auto;
-    padding-bottom: 4px;
-
+    span{
+      width: 30px;
+      height: 30px;
+      &:active{
+        width: 36px;
+        height: 36px;
+        box-shadow: 0px 0px 3px darkslategray;
+        margin: 0;
+        
+      }
+    }
   }
   .save-project{
     position: absolute;

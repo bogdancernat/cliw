@@ -50,13 +50,17 @@ body
         span(data-color="#ff1122")
       hr
       div.tools
-        span(data-tool="drawRect") RECT
-        span(data-tool="drawLine") LINE
-        span(data-tool="drawCircle") CIRCLE
+        span(data-tool="drawRect").rectangle R
+        span(data-tool="drawLine").line L
+        span(data-tool="drawCircle").circle C
+      hr
       div.actions
-        span(data-action="fill") FILL
-        span(data-action="border") BORDER
-        span(data-action="remove") REMOVE
+        span(data-action="fill").fill F
+        span(data-action="border").border B
+        span(data-action="remove").remove D
+      hr
+      div.stock-items
+
       button.save-project Save 
     div.workspace-area
       div.canvas-wrapper
