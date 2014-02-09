@@ -10,7 +10,7 @@ html
     div.wrapper
       div.wrap
         div.frame.effects.slide-zone#effects
-          ul
+          ul.list
             li.prj-prev
             li.prj-prev
             li.prj-prev
@@ -29,16 +29,18 @@ html
         div.scrollbar
           div.handle
           div.mousearea
-      div.controls.center
-        div.btn-group.max-move
-          button.btn.toStart
-            i.glyphicon.glyphicon-step-backward
-          button.btn.prev.toLeft
-            i.glyphicon.glyphicon-chevron-left
-          button.btn.next.toRight
-            i.glyphicon.glyphicon-chevron-right 
-          button.btn.toEnd
-            i.glyphicon.glyphicon-step-forward
+        div.controls
+          div.btn-group.move-slides
+            button.btn.toStart
+              i.glyphicon.glyphicon-step-backward
+            button.btn.prev.toLeft
+              i.glyphicon.glyphicon-chevron-left
+            button.btn.next.toRight
+              i.glyphicon.glyphicon-chevron-right 
+            button.btn.toEnd
+              i.glyphicon.glyphicon-step-forward
+          button.btn.toFullScreen
+            i.glyphicon.glyphicon-fullscreen
 
   script(src="/javascripts/jquery-2.0.3.min.js")
   script(src="/javascripts/bootstrap.min.js")
