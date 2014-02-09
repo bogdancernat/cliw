@@ -9,7 +9,12 @@ body{
   font-family: "Open Sans", "Lucida Grande", Helvetica, Arial, sans-serif;
   background: url('../images/paper_fibers.png');
   color: @gray-dark;
-
+-webkit-touch-callout: none;
+-webkit-user-select: none;
+-khtml-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
 }
 
 .container{
@@ -103,6 +108,7 @@ header{
   }
 }
 @canvas_tools_width: 250px;
+@margin_left: 10px;
 .canvas-tools{
   float: left;
   width: @canvas_tools_width;
@@ -110,8 +116,33 @@ header{
   height: ~"-moz-calc(100% - "@header_height~")";
   height: ~"calc(100% - "@header_height~")";
   position: relative;
+  background: rgba(47,79,79,0.4);
+
   .colors{
-    width: 100%;
+    width: @canvas_tools_width - @margin_left;
+    margin-left: @margin_left;
+    margin-top: 5px;
+    overflow: auto;
+    padding-bottom: 4px;
+    span{
+      width: 20px;
+      height: 20px;
+      float: left;
+      margin: 3px;
+      cursor: pointer;
+      @duration: 0.25s;
+      -webkit-transition: all @duration ;
+         -moz-transition: all @duration ;
+          -ms-transition: all @duration ;
+           -o-transition: all @duration ;
+              transition: all @duration ;
+      &.selected{
+        width: 26px;
+        height: 26px;
+        margin: 0;
+        box-shadow: 0px 1px 1px #232323;
+      }
+    }
   }
 
   .save-project{
@@ -177,19 +208,21 @@ footer{
   width: 100%;
   position: absolute;
   height: @footer_height;
-  bottom: 0;
+  bottom: 4px;
   float: left;
+
   .new-slide{
     border: none;
     position: absolute;
     height: @footer_height - 20px;
     line-height: @footer_height - 20px;
     width: @width_new_slide;
-    top: 10px;
+    top: 15px;
     right: 10px;
     background: darkslategray;
     color: white;
     border-radius: 3px;
+
     &.glyphicon:empty{
       width: @width_new_slide;
     }
@@ -197,6 +230,7 @@ footer{
       background: slategray;
     }
   }
+  @slide_height: @footer_height - 3px;
   .slides{
     height: @footer_height;
     width: ~"-webkit-calc(100% - "(@width_new_slide + 30px)~")";
@@ -206,28 +240,30 @@ footer{
 
     right: @width_new_slide + 20px;
     overflow: hidden;
+
     ul{
       margin: 0;
       padding: 0;
       list-style: none;
       height: @footer_height;
       .slide{
-        height: @footer_height;
+        height: @slide_height;
         float: left;
-        width: @footer_height * @slide_ratio;
+        width: @slide_height * @slide_ratio;
         background: white;
         margin-right: 4px;
         box-shadow: 0px 0px 2px @gray-dark;
         position: relative;
 
-        .glyphicon{
+        .glyphicon-trash{
           display: block;
           position: absolute;
-          top: 0;
-          right: 0;
-          background: white;
-          box-shadow: 0px 0px 1px @gray-dark;
+          top: 1px;
+          right: 1px;
+          color: white;
+          text-shadow: 0px 0px 3px @gray-dark;
           cursor:pointer;
+          border-bottom-left-radius: 3px;
         }
       }
     }
