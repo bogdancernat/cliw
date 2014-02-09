@@ -1,35 +1,50 @@
-extends layout
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.min.css')
+    if (data.pageStyles)
+      each style in data.pageStyles
+        link(rel='stylesheet', href='/stylesheets/' + style + '.css')
+  body
+    div.wrapper
+      div.wrap
+        div.frame.effects.slide-zone#effects
+          ul
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+            li.prj-prev
+        div.scrollbar
+          div.handle
+          div.mousearea
+      div.controls.center
+        div.btn-group.max-move
+          button.btn.toStart
+            i.glyphicon.glyphicon-step-backward
+          button.btn.prev.toLeft
+            i.glyphicon.glyphicon-chevron-left
+          button.btn.next.toRight
+            i.glyphicon.glyphicon-chevron-right 
+          button.btn.toEnd
+            i.glyphicon.glyphicon-step-forward
 
-block content
-  div.wrapper
-    div.wrap
-      div.frame.effects.slide-zone#effects
-        ul
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-          li.prj-prev
-      div.scrollbar
-        div.handle
-        div.mousearea
-    div.controls.center
-      div.btn-group.max-move
-        button.btn.toStart
-          i.glyphicon.glyphicon-step-backward
-        button.btn.prev.toLeft
-          i.glyphicon.glyphicon-chevron-left
-        button.btn.next.toRight
-          i.glyphicon.glyphicon-chevron-right 
-        button.btn.toEnd
-          i.glyphicon.glyphicon-step-forward
+  script(src="/javascripts/jquery-2.0.3.min.js")
+  script(src="/javascripts/bootstrap.min.js")
+  script(src="/javascripts/sly.min.js")
+
+  if (data.pageScripts)
+    each script in data.pageScripts
+      script(src="/javascripts/"+script+".js")
+

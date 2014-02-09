@@ -358,5 +358,44 @@ $(document).ready(function(){
   }
 
   $(window).resize(resizeElements);
+
+  // scrollable slides
+  var ul_width = $('.slide').length * ($('.slide').width() + 4);
+  $('.slides').find('ul').css('width', ul_width+'px');
+  var slides_wrapper = $('.slides')
+    , options = {
+      horizontal: 1,
+      smart: 1,
+      activateOn: 'click',
+      mouseDragging: 1,
+      touchDragging: 1,
+      releaseSwing: 1,
+      startAt: 0,
+      scrollBy: $('.slide').width(),
+      speed: 300,
+      elasticBounds: 1,
+      easing: 'swing',
+      dragHandle: 1,
+      dynamicHandle: 1,
+      clickBar: 1,
+    }
+    , sly = new Sly(slides_wrapper, options).init()
+    ;
+    
+    sly.reload();
+
+  var t_id;
+  $('.slide').hover(function(){
+    var elem = $(this);
+    t_id = setTimeout(function(){
+      var span = document.createElement('span');
+      $(span).addClass("glyphicon glyphicon-trash remove-slide")
+      $(elem).append(span)
+    },1000);
+  }, function (){
+    clearTimeout(t_id);
+    $(this).find('span').remove();
+  });
+
 });
 

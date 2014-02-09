@@ -15,73 +15,49 @@ head
   meta(name='description', content='')
   meta(name='viewport', content='width=device-width, initial-scale=1')
   link(rel="stylesheet", type="text/css", href="stylesheets/workspace.min.css")
-  style.
-    .selected{
-      opacity: 0.4;
-    }
-    .colors,.tools,.actions{
-      padding: 10px;
-      background: black;
-      overflow: auto;
-    }
-    .colors span{
-      border: 1px solid white;
-      padding: 0 10px;
-      height: 20px;
-      cursor: pointer;
-      float: left;
-      margin-right: 5px;
-    }
-    .tools span{
-      background: white;
-      padding: 0 10px;
-      height: 20px;
-      cursor: pointer;
-      float: left;
-      margin-right: 5px;
-      text-align: center;
-      line-height: 22px;
-    }
-    .actions span{
-      background: white;
-      padding: 0 10px;
-      height: 20px;
-      cursor: pointer;
-      float: left;
-      margin-right: 5px;
-      text-align: center;
-      line-height: 22px;
-    }
-    .actions span:active{
-      opacity: 0.4;
-    }
 body
   div.container
     header
       div.menu-toggle
+        div.toggle
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
       div.users
+        div.add-new-user.glyphicon.glyphicon-user
+        div.user-bubble.active
+        div.user-bubble
+        div.user-bubble.active
     nav.canvas-tools
-      div.tools
-        span(data-tool="drawRect") RECT
-        span(data-tool="drawLine") LINE
-        span(data-tool="drawCircle") CIRCLE
       div.colors
         span(data-color="#bada55")
         span(data-color="#ffffff")
         span(data-color="#000000")
         span(data-color="#ff1122")
+      
+      div.tools
+        span(data-tool="drawRect") RECT
+        span(data-tool="drawLine") LINE
+        span(data-tool="drawCircle") CIRCLE
       div.actions
         span(data-action="fill") FILL
         span(data-action="border") BORDER
         span(data-action="remove") REMOVE
-      button.save-project
+      button.save-project Save 
     div.workspace-area
       div.canvas-wrapper
         canvas(width="800px", height="500px")#canvas
+      footer
+        button.new-slide.glyphicon.glyphicon-plus
+        div.slides
+          ul
+            li.slide
+              //- span.glyphicon.glyphicon-trash.remove-slide
 
   script(src="/javascripts/jquery-2.0.3.min.js")
   script(src="/javascripts/bootstrap.min.js")
   script(src="/socket.io/socket.io.js")
   script(src="/javascripts/fabric.min.js")
+  script(src="/javascripts/sly.min.js")
   script(src="/javascripts/workspace.js")
 
