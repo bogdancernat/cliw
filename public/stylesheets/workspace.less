@@ -116,8 +116,8 @@ header{
   height: ~"-moz-calc(100% - "@header_height~")";
   height: ~"calc(100% - "@header_height~")";
   position: relative;
-  background: rgba(47,79,79,0.4);
-
+  background: rgba(255,255,255,1);
+  box-shadow: 0px 1px 2px @gray-darker;
   .colors,
   .tools,
   .actions,
@@ -149,6 +149,7 @@ header{
     span{
       width: 20px;
       height: 20px;
+      border-radius: 3px;
       &.selected{
         width: 26px;
         height: 26px;
