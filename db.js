@@ -129,6 +129,16 @@ function addDefaultData() {
           }
         }
       },
+      'projects_minimal':{
+        'map': function (doc) {
+          if(doc.type=='project') {
+            emit(doc.short_url, {
+              _id: doc._id,
+              name: doc.name
+            });
+          }
+        }
+      },
       'projects_by_id':{
         'map': function (doc) {
           if(doc.type=='project') {
@@ -222,6 +232,15 @@ exports.getUserByGoogleId = function (google_id, callback) {
 
 exports.getProject = function (url, callback) {
   db.view('cose-views', 'projects', {key: url}, function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows[0].value);
+    } else {
+      callback(null);
+    }
+  });
+}
+exports.getProjectMinimal = function (url, callback){
+  db.view('cose-views', 'projects_minimal', {key: url}, function (err, body){
     if(!err && body.rows.length) {
       callback(body.rows[0].value);
     } else {
