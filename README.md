@@ -1,4 +1,4 @@
 cliw
 ====
 
-Collaboratie Storyboard editor
+Collaborative Storyboard editor
