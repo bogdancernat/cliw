@@ -2,6 +2,7 @@ var canvasObjects = {};
 
 $(document).ready(function(){
   resizeElements();
+
   var mySocket
     , lastId = 0
     , socket = io.connect('http://localhost')
@@ -14,25 +15,63 @@ $(document).ready(function(){
     , x              = 0
     , y              = 0
     , startedDrawing = false
+    , queries        = getQueryParams(document.location.search)
     ;
 
   $('.colors').children().each(function (i, elem){
     $(elem).css('background',$(elem).attr('data-color'));
   });
 
+  // connecting to this project's room
+  socket.emit('join-room', queries.b);
+
+  // storing my socket_id 
   socket.on('socket_id', function (socket_id){
     mySocket = socket_id;
     fabric.Object.prototype.socket_id = mySocket;
     go();
   });
 
+  // 
+  socket.on('canvas-sync', function (data){
+    console.log(data);
+
+    for(socket_id in data){
+      var k = JSON.parse(JSON.stringify(socket_id));
+      var objects = [];
+
+      for(obj_id in data[socket_id]){
+        var id = JSON.parse(JSON.stringify(obj_id));
+        data[socket_id][obj_id].id = id;
+        data[socket_id][obj_id].socket_id = k;
+        objects.push(data[socket_id][obj_id]);
+      }
+
+      fabric.util.enlivenObjects(objects, function (alive){
+        for (var i = 0; i < alive.length; i++) {
+          var o = alive[i];
+          o.centeredRotation = true;
+          o.centeredScaling  = true;
+
+          if(typeof canvasObjects[o.socket_id] !== "object"){
+            canvasObjects[o.socket_id] = {};
+          }
+          canvasObjects[o.socket_id][o.id] = o;
+          canvas.add(o);
+        };
+      });
+    }
+  });
+
   socket.on('new-object', function (obj){
     var parsed = JSON.parse(obj.data);
+
+    parsed.socket_id = obj.socket_id;
+    parsed.id = obj.id;
+
     fabric.util.enlivenObjects([parsed], function (alive){
       var o = alive[0];
 
-      o.socket_id        = obj.socket_id;
-      o.id               = obj.id;
       o.centeredRotation = true;
       o.centeredScaling  = true;
 
@@ -155,6 +194,7 @@ $(document).ready(function(){
     // rect1.setCoords();
     socket.emit('resize-object',{
       id: d.target.id,
+      b: queries.b,
       socket_id: d.target.socket_id,
       scaleX: d.target.scaleX,
       scaleY: d.target.scaleY
@@ -165,13 +205,17 @@ $(document).ready(function(){
     // rect1.rotate(d.target.angle);
     socket.emit('rotate-object',{
       id: d.target.id,
+      b: queries.b,
       socket_id: d.target.socket_id,
       angle: d.target.angle,
+      left: d.target.left,
+      top: d.target.top
     });
   });
   canvas.on("object:moving", function (d){
     socket.emit('move-object',{
       id: d.target.id,
+      b: queries.b,
       socket_id: d.target.socket_id,
       top: d.target.top,
       left: d.target.left
@@ -237,7 +281,12 @@ $(document).ready(function(){
         canvasObjects[obj.socket_id] = {};
       }
       canvasObjects[obj.socket_id][obj.id] = obj;
-      socket.emit('new-object', {id: obj.id, socket_id: obj.socket_id, data: JSON.stringify(obj)});
+      socket.emit('new-object', {
+        id: obj.id, 
+        b: queries.b,
+        socket_id: obj.socket_id, 
+        data: JSON.stringify(obj)
+      });
     }
 
   }
@@ -261,6 +310,7 @@ $(document).ready(function(){
 
       socket.emit('update-new-object-rect', {
         id: obj.id, 
+        b: queries.b,
         socket_id: mySocket,
         width: 2*w,
         height: 2*h
@@ -275,6 +325,7 @@ $(document).ready(function(){
 
       socket.emit('update-new-object-line', {
         id: obj.id, 
+        b: queries.b,
         socket_id: mySocket,
         x2: mouse.x,
         y2: mouse.y
@@ -290,6 +341,7 @@ $(document).ready(function(){
 
     socket.emit('meta-object',{
       id: o.id,
+      b: queries.b,
       socket_id: o.socket_id,
       meta_data: {
         fill: selectedColor
@@ -303,6 +355,7 @@ $(document).ready(function(){
     o.stroke = selectedColor;
     socket.emit('meta-object',{
       id: o.id,
+      b: queries.b,
       socket_id: o.socket_id,
       meta_data: {
         stroke: selectedColor
@@ -316,6 +369,7 @@ $(document).ready(function(){
 
     socket.emit('remove-object',{
       id: o.id,
+      b: queries.b,
       socket_id: o.socket_id
     });
     canvas.remove(o);
@@ -381,7 +435,7 @@ $(document).ready(function(){
     }
     , sly = new Sly(slides_wrapper, options).init()
     ;
-    
+
     sly.reload();
 
   var t_id;
@@ -397,5 +451,17 @@ $(document).ready(function(){
     $(this).find('span').remove();
   });
 
+  function getQueryParams(qs) {
+    qs = qs.split("+").join(" ");
+    var params = {}
+      , tokens
+      , re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+      params[decodeURIComponent(tokens[1])]
+        = decodeURIComponent(tokens[2]);
+    }
+    return params;
+  }
 });
 

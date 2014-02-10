@@ -39,6 +39,7 @@ var project = {
   collaborators: [],
   closed       : false,
   active       : false,
+  objects      : {},
   created_on   : null,
 }
 
