@@ -29,7 +29,7 @@ exports.save = function (req, res){
     slideshow.short_url = req.body.short_url;
     slideshow.pages = JSON.parse(req.body.data);
     db.getProjectMinimal(req.body.short_url, function (project_details){
-      slideshow.name = project_detials.name;
+      slideshow.name = project_details.name;
       db.insert(slideshow, function (resp){
         res.send(200);
       });
