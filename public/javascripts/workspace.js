@@ -10,7 +10,7 @@ $(document).ready(function(){
         width: 800,
         height: 500,
         selection: false,
-        background: rgba(255,255,255,1)
+        background: 'rgba(255,255,255,1)'
       })
     , actionCreate   = null
     , selectedColor  = "#000000"
@@ -206,12 +206,8 @@ $(document).ready(function(){
     $('.colors').children().click(function (e){
       var c = $(this).attr('data-color');
       $('.colors').children().removeClass('selected');
-      if(!c.match(/^\#[0-9a-fA-F]{6}$/)){
-        c = "#000000";
-      } else {
-        selectedColor = c;
-        $(this).addClass('selected');
-      }
+      selectedColor = c;
+      $(this).addClass('selected');
     });
 
     $('.actions').children().click(function (e){
