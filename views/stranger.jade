@@ -7,28 +7,40 @@ html
     nav.navbar.navbar-default(role='navigation')
       div.navbar-header
         a.navbar-brand(href='#') Cosé
-    div.auth-wrapper
-      div.media-login
-        a(href="/auth/facebook")#facebookLogin.autoLogin 
-        a(href="/auth/twitter")#twitterLogin.autoLogin
-        a(href="/auth/google")#googleLogin.autoLogin
-      div.manual-login
-        div.slideForms
-          form(action="/login",method="POST")#form-login
-            input(type="email", placeholder="email", name="email").form-control
-            input(type="password", placeholder="password", name="password").form-control
-            button(type="submit").btn.btn-primary log in
-            p Don't have an account? 
-              a(href="#signup") 
-                strong Sign Up
-          form(action="/signup",method="POST")#form-signup
-            input(type="email", placeholder="email", name="email").form-control
-            input(type="password", placeholder="password", name="password").form-control
-            input(type="password", placeholder="password", name="passwordRetype").form-control
-            button(type="submit").btn.btn-primary sign up
-            p Already have an acoount?
-              a(href="#signin")
-                strong Sign In
+    div.wrapper.forms
+      div.col-sm-offset-4.col-sm-4
+        legend Sign In
+        form(action="/login",method="POST" role="form").form-horizontal#form-login
+          div.form-group
+            label(for="email-input-login").col-sm-3.control-label Email
+            div.col-sm-9
+              input(type="email", placeholder="email", name="email").form-control#email-input-login
+          div.form-group
+            label(for="password-input-login").col-sm-3.control-label Password
+            div.col-sm-9
+              input(type="password", placeholder="password", name="password").form-control#password-input-login
+          div.form-group
+            div.col-sm-offset-3.col-sm-9
+              button(type="submit").btn.btn-primary Sign in
+              a(href="/auth/facebook")#facebookLogin.btn.btn-primary Sign in with Facebook
+        legend Sign Up 
+        form(action="/signup",method="POST" role="form").form-horizontal#form-signup
+          div.form-group
+            label(for="email-input-register").col-sm-3.control-label Email
+            div.col-sm-9
+              input(type="email", placeholder="email", name="email").form-control#email-input-register
+          div.form-group
+            label(for="password-input-register").col-sm-3.control-label Password
+            div.col-sm-9
+              input(type="password", placeholder="password", name="password").form-control#password-input-register
+          div.form-group
+            label(for="re_password-input-register").col-sm-3.control-label Re-Password
+            div.col-sm-9
+              input(type="password", placeholder="password", name="passwordRetype").form-control#re_password-input-register
+          div.form-group
+            div.col-sm-offset-3.col-sm-9
+              button(type="submit").btn.btn-primary Sign up
+  
     script(src="/javascripts/jquery-2.0.3.min.js")
     script(src="/javascripts/bootstrap.min.js")
     script(src="/javascripts/stranger.js")
