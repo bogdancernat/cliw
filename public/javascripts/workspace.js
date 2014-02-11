@@ -39,11 +39,14 @@ $(document).ready(function(){
 
   // 
   socket.on('canvas-sync', function (data){
+    console.log(data);
     for(page in data){
+      if(page!="page1"){
+        addNewSlide();
+      }
       for(socket_id in data[page]){
         var k = JSON.parse(JSON.stringify(socket_id));
         var objects = [];
-
         for(obj_id in data[page][socket_id]){
           var id = JSON.parse(JSON.stringify(obj_id));
           data[page][socket_id][obj_id].id = id;
@@ -292,7 +295,7 @@ $(document).ready(function(){
     canvas.lastSelected = {
       id: d.target.id,
       b: queries.b,
-      socket_id: d.target.socket_id
+      socket_id: d.target.socket_id,
       page: d.target.page,
     };
     socket.emit('lock-object', {
@@ -318,6 +321,7 @@ $(document).ready(function(){
         var saved = JSON.parse(JSON.stringify(this._objects[i]));
         var obj = new fabric.Path(saved.path,{
           id: genId(),
+          page: selectedPage,
           strokeWidth: 3,
           strokeLineCap: "round",
           strokeLineJoin: "round",
@@ -332,18 +336,21 @@ $(document).ready(function(){
         });
         obj.setCoords();
         canvas.add(obj);
-        if(typeof canvasObjects[o.page][obj.socket_id] !== "object"){
-          canvasObjects[o.page][obj.socket_id] = {};
+        if(typeof canvasObjects[obj.page] !== "object"){
+          canvasObjects[obj.page] = {};
         }
-        canvasObjects[o.page][obj.socket_id][obj.id] = obj;
+        if(typeof canvasObjects[obj.page][obj.socket_id] !== "object"){
+          canvasObjects[obj.page][obj.socket_id] = {};
+        }
+        canvasObjects[obj.page][obj.socket_id][obj.id] = obj;
 
         socket.emit('new-object', {
           id: obj.id, 
           b: queries.b,
+          page: obj.page,
           socket_id: obj.socket_id, 
           data: JSON.stringify(obj)
         });
-
         canvas.setActiveObject(obj);
         canvas.renderAll();
         this._objects.splice(i,1);
@@ -365,6 +372,7 @@ $(document).ready(function(){
         id: genId(),
         left: x,
         top: y,
+        page: selectedPage,
         fill: "rgba(0,0,0,0)",
         stroke: selectedColor,
         strokeWidth: 2,
@@ -385,6 +393,7 @@ $(document).ready(function(){
     if(actionCreate == 'drawCircle'){
       obj = new fabric.Circle({
         id: genId(),
+        page: selectedPage,
         left: x,
         top: y,
         fill: "rgba(0,0,0,0)",
@@ -406,6 +415,7 @@ $(document).ready(function(){
     if(actionCreate == 'drawTriangle'){
       obj = new fabric.Triangle({
         id: genId(),
+        page: selectedPage,
         left: x,
         top: y,
         fill: "rgba(0,0,0,0)",
@@ -428,6 +438,7 @@ $(document).ready(function(){
     if(actionCreate == 'drawLine'){
       obj = new fabric.Line([x, y, x, y],{
         id: genId(),
+        page: selectedPage,
         fill: selectedColor,
         stroke: selectedColor,
         strokeWidth: 2,
@@ -452,13 +463,18 @@ $(document).ready(function(){
     // }
 
     if(startedDrawing){
-      if(typeof canvasObjects[o.page][obj.socket_id] !== "object"){
-        canvasObjects[o.page][obj.socket_id] = {};
+      
+      if(typeof canvasObjects[obj.page] !== "object"){
+        canvasObjects[obj.page] = {};
       }
-      canvasObjects[o.page][obj.socket_id][obj.id] = obj;
+      if(typeof canvasObjects[obj.page][obj.socket_id] !== "object"){
+        canvasObjects[obj.page][obj.socket_id] = {};
+      }
+      canvasObjects[obj.page][obj.socket_id][obj.id] = obj;
       socket.emit('new-object', {
         id: obj.id, 
         b: queries.b,
+        page: obj.page,
         socket_id: obj.socket_id, 
         data: JSON.stringify(obj)
       });
@@ -487,6 +503,7 @@ $(document).ready(function(){
         id: obj.id, 
         b: queries.b,
         socket_id: mySocket,
+        page: obj.page,
         width: 2*w,
         height: 2*h
       });
@@ -507,6 +524,7 @@ $(document).ready(function(){
       socket.emit('update-new-object-triangle', {
         id: obj.id, 
         b: queries.b,
+        page: obj.page,
         socket_id: mySocket,
         width: 2*w,
         height: 2*h
@@ -529,6 +547,7 @@ $(document).ready(function(){
 
       socket.emit('update-new-object-circle', {
         id: obj.id, 
+        page: obj.page,
         b: queries.b,
         socket_id: mySocket,
         radius: r
@@ -543,6 +562,7 @@ $(document).ready(function(){
 
       socket.emit('update-new-object-line', {
         id: obj.id, 
+        page: obj.page,
         b: queries.b,
         socket_id: mySocket,
         x2: mouse.x,
@@ -598,6 +618,7 @@ $(document).ready(function(){
 
     socket.emit('meta-object',{
       id: o.id,
+      page: o.page,
       b: queries.b,
       socket_id: o.socket_id,
       meta_data: {
@@ -612,6 +633,7 @@ $(document).ready(function(){
     o.stroke = selectedColor;
     socket.emit('meta-object',{
       id: o.id,
+      page: o.page,
       b: queries.b,
       socket_id: o.socket_id,
       meta_data: {
@@ -626,11 +648,12 @@ $(document).ready(function(){
 
     socket.emit('remove-object',{
       id: o.id,
+      page: o.page,
       b: queries.b,
       socket_id: o.socket_id
     });
     canvas.remove(o);
-    delete canvasObjects[o.socket_id][o.id];
+    delete canvasObjects[o.page][o.socket_id][o.id];
     canvas.renderAll();
   }
 
@@ -641,6 +664,7 @@ $(document).ready(function(){
 
     socket.emit('bring-front',{
       id: o.id,
+      page: o.page,
       b: queries.b,
       socket_id: o.socket_id
     });
@@ -654,6 +678,7 @@ $(document).ready(function(){
     console.log(o);
     socket.emit('push-back',{
       id: o.id,
+      page: o.page,
       b: queries.b,
       socket_id: o.socket_id
     });
@@ -699,10 +724,10 @@ $(document).ready(function(){
     }
     , sly = new Sly(slides_wrapper, options).init()
     ;
-
-    sly.reload();
-
+    var slide_width = $('.slide').width();
+    $('.slides ul').css('width',($('.slides ul').children().length + 5)*slide_width+'px');
   var t_id;
+
   $('.slide').hover(function(){
     var elem = $(this);
     t_id = setTimeout(function(){
@@ -714,7 +739,54 @@ $(document).ready(function(){
     clearTimeout(t_id);
     $(this).find('span').remove();
   });
+  
+  $(document).on('click', '.new-slide', function(){
 
+    var slideId = addNewSlide();
+    selectedPage = slideId;
+
+    updateCanvas();
+    canvasObjects[slideId] = {};
+
+    socket.emit('new-page', {
+      page_id: slideId,
+      socket_id: mySocket,
+      b: queries.b
+    });
+
+  });
+
+  $(document).on('click', '.slide', function(){
+    selectedPage = $(this).attr('id');
+
+    updateCanvas();
+  });
+
+  function updateCanvas(){
+    canvas.clear();
+    for(socket_id in canvasObjects[selectedPage]){
+      for(object in canvasObjects[selectedPage][socket_id]){
+        canvas.add(canvasObjects[selectedPage][socket_id][object]);
+      }
+    }
+  }
+
+  function addNewSlide(){
+    var newSlide = document.createElement('li')
+      , lastId = $('.slide').last().attr('id')
+      , newId = 'page'+ (parseInt(lastId.slice(4,5))+1)
+      ;
+
+    $(newSlide).addClass('slide');
+    $(newSlide).attr('id',newId);
+    $('.slides ul').append(newSlide);
+    console.log($('.slide'));
+    var slide_width = $('.slide').width();
+    $('.slides ul').css('width',($('.slide').length  + 5)* slide_width+'px');
+    sly.reload();
+    return newId;
+  }
+  
   function getQueryParams(qs) {
     qs = qs.split("+").join(" ");
     var params = {}
@@ -727,5 +799,6 @@ $(document).ready(function(){
     }
     return params;
   }
+
 });
 

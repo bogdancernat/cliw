@@ -29,7 +29,7 @@ var interval_id = setInterval(function syncCanvasesWithDb (){
         console.log(canvases[url]);
         canvases[url].must_sync = false;
         canvases[url].safe_to_sync = false;
-        project.objects = canvases[url].objects;
+        project.pages = canvases[url].pages;
         // update
         db.update(project, project._id, function (resp){
          canvases[url].safe_to_sync = true;
@@ -46,19 +46,17 @@ exports.connection = function (socket){
   socket.on('join-room', function (room){
     if(typeof canvases[room] !== "object"){
       db.getProject(room, function (project){
-        console.log(project);
-        canvases[project.short_url] = {};
-        canvases[project.short_url]['must_sync'] = false;
-        // just a safe switch to make sure i'm updating after all db actions ended
-        canvases[project.short_url]['safe_to_sync'] = true;
-        canvases[project.short_url]['pages'] = {};
-
+        canvases[room] = {};
         if(project && project.pages){
           canvases[project.short_url].pages = project.pages;
         } else {
-          canvases[project.short_url].pages['page1'] = {};
+          canvases[room]['pages'] = {};
+          canvases[room].pages['page1'] = {};
         }
-
+        console.log(project);
+        canvases[room]['must_sync'] = false;
+        // just a safe switch to make sure i'm updating after all db actions ended
+        canvases[room]['safe_to_sync'] = true;
         socket.join(room);
         socket.emit('canvas-sync', canvases[room].pages);
       });
@@ -70,13 +68,20 @@ exports.connection = function (socket){
   });
 
   socket.on('new-object', function (data){
+    console.log(canvases);
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      if(typeof canvases[data.b]['objects'][data.socket_id] !== "object"){
-        canvases[data.b]['objects'][data.socket_id] = {};
-      }
-      canvases[data.b]['objects'][data.socket_id][data.id] = JSON.parse(data.data);
 
+      if(typeof canvases[data.b].pages[data.page] !== "object"){
+        canvases[data.b].pages[data.page] = {};
+        canvases[data.b].pages[data.page] = {};
+      }
+      if(typeof canvases[data.b].pages[data.page][data.socket_id] !== "object"){
+        canvases[data.b].pages[data.page][data.socket_id] = {};
+      }
+      canvases[data.b].pages[data.page][data.socket_id][data.id] = JSON.parse(data.data);
+
+      console.log(canvases);
       socket.broadcast.to(data.b).emit('new-object', data);
     }
   });
@@ -84,8 +89,8 @@ exports.connection = function (socket){
   socket.on('update-new-object-rect', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].width = data.width;
-      canvases[data.b]['objects'][data.socket_id][data.id].height = data.height;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].width = data.width;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].height = data.height;
       socket.broadcast.to(data.b).emit('update-new-object-rect', data);
     }
   });
@@ -93,15 +98,15 @@ exports.connection = function (socket){
   socket.on('update-new-object-circle', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].radius = data.radius;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].radius = data.radius;
       socket.broadcast.to(data.b).emit('update-new-object-circle', data);
     }
   });
   socket.on('update-new-object-triangle', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].width = data.width;
-      canvases[data.b]['objects'][data.socket_id][data.id].height = data.height;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].width = data.width;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].height = data.height;
       socket.broadcast.to(data.b).emit('update-new-object-triangle', data);
     }
   });
@@ -109,8 +114,8 @@ exports.connection = function (socket){
   socket.on('update-new-object-line', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].x2 = data.x2;
-      canvases[data.b]['objects'][data.socket_id][data.id].y2 = data.y2;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].x2 = data.x2;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].y2 = data.y2;
       socket.broadcast.to(data.b).emit('update-new-object-line', data);
     }
   });
@@ -118,8 +123,8 @@ exports.connection = function (socket){
   socket.on('resize-object', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].scaleX = data.scaleX;
-      canvases[data.b]['objects'][data.socket_id][data.id].scaleY = data.scaleY;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].scaleX = data.scaleX;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].scaleY = data.scaleY;
       socket.broadcast.to(data.b).emit('resize-object', data);
     }
   });
@@ -127,9 +132,9 @@ exports.connection = function (socket){
   socket.on('rotate-object', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].angle = data.angle;
-      canvases[data.b]['objects'][data.socket_id][data.id].left = data.left;
-      canvases[data.b]['objects'][data.socket_id][data.id].top = data.top;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].angle = data.angle;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].left = data.left;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].top = data.top;
 
       socket.broadcast.to(data.b).emit('rotate-object', data);
     }
@@ -138,8 +143,8 @@ exports.connection = function (socket){
   socket.on('move-object', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      canvases[data.b]['objects'][data.socket_id][data.id].left = data.left;
-      canvases[data.b]['objects'][data.socket_id][data.id].top = data.top;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].left = data.left;
+      canvases[data.b].pages[data.page][data.socket_id][data.id].top = data.top;
       socket.broadcast.to(data.b).emit('move-object', data);
     }
   });
@@ -149,26 +154,33 @@ exports.connection = function (socket){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
       for (attr in data.meta_data){
-        canvases[data.b]['objects'][data.socket_id][data.id][attr] = data.meta_data[attr];
+        canvases[data.b].pages[data.page][data.socket_id][data.id][attr] = data.meta_data[attr];
       }
       socket.broadcast.to(data.b).emit('meta-object', data);
     }
   });
 
   socket.on('lock-object', function (data){
-    socket.broadcast.to(data.b).emit('lock-object', data);
+    if(data.b){
+      socket.broadcast.to(data.b).emit('lock-object', data);
+    }
   });
 
   socket.on('unlock-object', function (data){
-    socket.broadcast.to(data.b).emit('unlock-object', data);
+    if(data && data.b){
+      socket.broadcast.to(data.b).emit('unlock-object', data);
+    }
   });
 
   socket.on('remove-object', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
-      delete canvases[data.b]['objects'][data.socket_id][data.id];
+      delete canvases[data.b].pages[data.page][data.socket_id][data.id];
       socket.broadcast.to(data.b).emit('remove-object', data);
     }
   });
 
+  socket.on('new-page', function (data){
+    
+  });
 } 
