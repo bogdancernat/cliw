@@ -49,20 +49,22 @@ exports.connection = function (socket){
         console.log(project);
         canvases[project.short_url] = {};
         canvases[project.short_url]['must_sync'] = false;
+        // just a safe switch to make sure i'm updating after all db actions ended
         canvases[project.short_url]['safe_to_sync'] = true;
-        canvases[project.short_url]['objects'] = {};
-        if(project && project.objects){
-          // just a safe switch to make sure i'm updating after all db actions ended
-          for (obj_id in project.objects) {
-            canvases[project.short_url].objects[obj_id] = project.objects[obj_id];
-          };
+        canvases[project.short_url]['pages'] = {};
+
+        if(project && project.pages){
+          canvases[project.short_url].pages = project.pages;
+        } else {
+          canvases[project.short_url].pages['page1'] = {};
         }
+
         socket.join(room);
-        socket.emit('canvas-sync', canvases[room].objects);
+        socket.emit('canvas-sync', canvases[room].pages);
       });
     } else {
       socket.join(room);
-      socket.emit('canvas-sync', canvases[room].objects);
+      socket.emit('canvas-sync', canvases[room].pages);
     }
 
   });

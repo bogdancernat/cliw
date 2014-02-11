@@ -17,12 +17,16 @@ $(document).ready(function(){
     , y              = 0
     , startedDrawing = false
     , queries        = getQueryParams(document.location.search)
+    , selectedPage   = "page1"
     ;
 
   $('.colors').children().each(function (i, elem){
     $(elem).css('background',$(elem).attr('data-color'));
   });
 
+  $('.slide').click(function (e){
+    selectedPage = $(this).attr('id');
+  });
   // connecting to this project's room
   socket.emit('join-room', queries.b);
 
@@ -35,32 +39,38 @@ $(document).ready(function(){
 
   // 
   socket.on('canvas-sync', function (data){
-    console.log(data);
+    for(page in data){
+      for(socket_id in data[page]){
+        var k = JSON.parse(JSON.stringify(socket_id));
+        var objects = [];
 
-    for(socket_id in data){
-      var k = JSON.parse(JSON.stringify(socket_id));
-      var objects = [];
+        for(obj_id in data[page][socket_id]){
+          var id = JSON.parse(JSON.stringify(obj_id));
+          data[page][socket_id][obj_id].id = id;
+          data[page][socket_id][obj_id].socket_id = k;
+          data[page][socket_id][obj_id].page = JSON.parse(JSON.stringify(page));
+          objects.push(data[page][socket_id][obj_id]);
+        }
 
-      for(obj_id in data[socket_id]){
-        var id = JSON.parse(JSON.stringify(obj_id));
-        data[socket_id][obj_id].id = id;
-        data[socket_id][obj_id].socket_id = k;
-        objects.push(data[socket_id][obj_id]);
+        fabric.util.enlivenObjects(objects, function (alive){
+          for (var i = 0; i < alive.length; i++) {
+            var o = alive[i];
+            o.centeredRotation = true;
+            o.centeredScaling  = true;
+
+            if(typeof canvasObjects[o.page] !== "object"){
+              canvasObjects[o.page] = {};
+            }
+            if(typeof canvasObjects[o.page][o.socket_id] !== "object"){
+              canvasObjects[o.page][o.socket_id] = {};
+            }
+            canvasObjects[o.page][o.socket_id][o.id] = o;
+            if(o.page == 'page1'){
+              canvas.add(o);
+            }
+          };
+        });
       }
-
-      fabric.util.enlivenObjects(objects, function (alive){
-        for (var i = 0; i < alive.length; i++) {
-          var o = alive[i];
-          o.centeredRotation = true;
-          o.centeredScaling  = true;
-
-          if(typeof canvasObjects[o.socket_id] !== "object"){
-            canvasObjects[o.socket_id] = {};
-          }
-          canvasObjects[o.socket_id][o.id] = o;
-          canvas.add(o);
-        };
-      });
     }
   });
 
@@ -69,6 +79,7 @@ $(document).ready(function(){
 
     parsed.socket_id = obj.socket_id;
     parsed.id = obj.id;
+    parsed.page = obj.page;
 
     fabric.util.enlivenObjects([parsed], function (alive){
       var o = alive[0];
@@ -76,44 +87,49 @@ $(document).ready(function(){
       o.centeredRotation = true;
       o.centeredScaling  = true;
 
-      if(typeof canvasObjects[obj.socket_id] !== "object"){
-        canvasObjects[obj.socket_id] = {};
+      if(typeof canvasObjects[o.page] !== "object"){
+        canvasObjects[o.page] = {};
       }
-      canvasObjects[obj.socket_id][obj.id] = o;
-      canvas.add(o);
+      if(typeof canvasObjects[o.page][obj.socket_id] !== "object"){
+        canvasObjects[o.page][obj.socket_id] = {};
+      }
+      canvasObjects[o.page][obj.socket_id][obj.id] = o;
+      if(o.page == selectedPage){
+        canvas.add(o);
+      }
     });
   });
   
   socket.on('update-new-object-rect', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.set('width',data.width).set('height',data.height);
     o.setCoords();
     canvas.renderAll();
   });
 
   socket.on('update-new-object-circle', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.set('radius',data.radius);
     o.setCoords();
     canvas.renderAll();
   });
 
   socket.on('update-new-object-triangle', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.set('width',data.width).set('height',data.height);
     o.setCoords();
     canvas.renderAll();
   });
 
   socket.on('update-new-object-line', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.set('x2',data.x2).set('y2',data.y2);
     o.setCoords();
     canvas.renderAll();
   });
 
   socket.on('resize-object', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.scaleX = data.scaleX;
     o.scaleY = data.scaleY;
     o.setCoords();
@@ -121,7 +137,7 @@ $(document).ready(function(){
   });
   
   socket.on('move-object', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.top  = data.top;
     o.left = data.left;
     o.setCoords();
@@ -129,31 +145,31 @@ $(document).ready(function(){
   });
 
   socket.on('rotate-object', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.rotate(data.angle);
     o.setCoords();
     canvas.renderAll();
   });
 
   socket.on('remove-object', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     canvas.remove(o);
-    delete canvasObjects[data.socket_id][data.id];
+    delete canvasObjects[data.page][data.socket_id][data.id];
     canvas.renderAll();
     
   });
   socket.on('lock-object', function (data){
     console.log(data);
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.selectable = false;
   });
   socket.on('unlock-object', function (data){
     console.log(data);
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     o.selectable = true;
   })
   socket.on('meta-object', function (data){
-    var o = canvasObjects[data.socket_id][data.id];
+    var o = canvasObjects[data.page][data.socket_id][data.id];
     for(key in data.meta_data){
       o[key] = data.meta_data[key]; 
     }
@@ -162,15 +178,6 @@ $(document).ready(function(){
   });
 
   function go(){
-    var createObjects = {
-      drawRect: function(){
-        console.log('drawing rect');
-      },
-      drawLine: function(){
-        console.log('drawing line');
-      }
-    }
-
     $('.tools').children().click(function (e){
       var f = $(this).attr('data-tool');
       if(actionCreate == f){
@@ -234,7 +241,6 @@ $(document).ready(function(){
     // rect1.scaleY = d.target.scaleY;
     // rect1.setCoords();
     if(d.target.objects){
-      console.log(d);
       for (var i = 0; i < d.target.objects.length; i++) {
         socket.emit('resize-object',{
           id: d.target.objects[i].id,
@@ -249,6 +255,7 @@ $(document).ready(function(){
         id: d.target.id,
         b: queries.b,
         socket_id: d.target.socket_id,
+        page: d.target.page,
         scaleX: d.target.scaleX,
         scaleY: d.target.scaleY
       });
@@ -260,6 +267,7 @@ $(document).ready(function(){
     socket.emit('rotate-object',{
       id: d.target.id,
       b: queries.b,
+      page: d.target.page,
       socket_id: d.target.socket_id,
       angle: d.target.angle,
       left: d.target.left,
@@ -271,6 +279,7 @@ $(document).ready(function(){
     socket.emit('move-object',{
       id: d.target.id,
       b: queries.b,
+      page: d.target.page,
       socket_id: d.target.socket_id,
       top: d.target.top,
       left: d.target.left
@@ -284,11 +293,13 @@ $(document).ready(function(){
       id: d.target.id,
       b: queries.b,
       socket_id: d.target.socket_id
+      page: d.target.page,
     };
     socket.emit('lock-object', {
       id: d.target.id,
       b: queries.b,
       socket_id: d.target.socket_id,
+      page: d.target.page,
     });
   });
 
@@ -321,10 +332,10 @@ $(document).ready(function(){
         });
         obj.setCoords();
         canvas.add(obj);
-        if(typeof canvasObjects[obj.socket_id] !== "object"){
-          canvasObjects[obj.socket_id] = {};
+        if(typeof canvasObjects[o.page][obj.socket_id] !== "object"){
+          canvasObjects[o.page][obj.socket_id] = {};
         }
-        canvasObjects[obj.socket_id][obj.id] = obj;
+        canvasObjects[o.page][obj.socket_id][obj.id] = obj;
 
         socket.emit('new-object', {
           id: obj.id, 
@@ -441,10 +452,10 @@ $(document).ready(function(){
     // }
 
     if(startedDrawing){
-      if(typeof canvasObjects[obj.socket_id] !== "object"){
-        canvasObjects[obj.socket_id] = {};
+      if(typeof canvasObjects[o.page][obj.socket_id] !== "object"){
+        canvasObjects[o.page][obj.socket_id] = {};
       }
-      canvasObjects[obj.socket_id][obj.id] = obj;
+      canvasObjects[o.page][obj.socket_id][obj.id] = obj;
       socket.emit('new-object', {
         id: obj.id, 
         b: queries.b,
