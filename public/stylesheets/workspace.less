@@ -327,7 +327,13 @@ header{
     }
   }
 
-
+  .item-stk {
+    width: 90px;
+    height: 90px;
+    margin: 5px;
+    float: left;
+    margin-top: 10px;
+  }
 
 
   .actions{
@@ -402,6 +408,10 @@ header{
   margin-top: 4px;
 }
 
+.slide-active {
+  background-color: #f3f3f3;
+}
+
 @footer_height: 55px;
 @width_new_slide: 60px;
 @slide_ratio: @canvas_width/@canvas_height;
@@ -457,7 +467,7 @@ footer{
         box-shadow: 0px 0px 2px @gray-dark;
         position: relative;
         cursor: pointer;
-
+        
         .glyphicon-trash{
           display: block;
           position: absolute;
