@@ -741,7 +741,8 @@ $(document).ready(function(){
   });
   
   $(document).on('click', '.new-slide', function(){
-
+    $('.slide-active').removeClass('.slide-active');
+    $(this).addClass('slide-active');
     var slideId = addNewSlide();
     selectedPage = slideId;
 
@@ -757,9 +758,43 @@ $(document).ready(function(){
   });
 
   $(document).on('click', '.slide', function(){
+    var lastSlide = $(selectedPage);
     selectedPage = $(this).attr('id');
+    $('.slide-active').removeClass('.slide-active');
+    $(this).addClass('slide-active');
 
     updateCanvas();
+  });
+  
+  $('.save-project').click(function (){
+    socket.emit('stop-drawing-monkeys', {
+      b: queries.b,
+      socket_id: mySocket
+    });
+    var exported_project = [];
+    for(page in canvasObjects){
+      canvas.clear();
+      for(socket_id in canvasObjects[page]){
+        for(object in canvasObjects[page][socket_id]){
+          canvas.add(canvasObjects[page][socket_id][object]);
+        }
+      }
+      var c = document.getElementById('canvas');
+      exported_project.push(c.toDataURL());
+    }
+    $.post('/saveProject',{
+      data: JSON.stringify(exported_project), 
+      short_url: queries.b
+    }, function (resp){
+      console.log(resp);
+      if(resp == 'OK'){
+        window.location = "/preview/?b="+queries.b
+      }
+    });
+  });
+  
+  socket.on('stop-drawing-monkeys', function (data){
+
   });
 
   function updateCanvas(){

@@ -11,21 +11,9 @@ html
       div.wrap
         div.frame.effects.slide-zone#effects
           ul.list
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
-            li.prj-prev
+            each project_image in data.project.pages
+              li.prj-prev
+                img(src=project_image, alt="")
         div.scrollbar
           div.handle
           div.mousearea

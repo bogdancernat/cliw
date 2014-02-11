@@ -14,10 +14,22 @@ exports.create = function (req, res){
     p.collaborators.push(p.owner);
 
     p.short_url = hash.encrypt(p.created_on);
-    console.log(p.short_url);
     db.insert(p, function (resp){
-
+      res.send({url:"/workspace?b="+p.short_url});
     });
-    res.send({url:"/workspace?b="+p.short_url});
+  }
+}
+exports.save = function (req, res){
+  if(!req.body.data || !req.body.data.length){
+    res.send(400);
+  } else {
+    var slideshow = db.getSlideshowModel();
+    slideshow.created_on = +new Date;
+    slideshow.owner = req.user._id;
+    slideshow.short_url = req.body.short_url;
+    slideshow.pages = JSON.parse(req.body.data);
+    db.insert(slideshow, function (resp){
+      res.send(200);
+    });
   }
 }

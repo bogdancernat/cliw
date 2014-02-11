@@ -43,6 +43,13 @@ var project = {
   created_on   : null,
 }
 
+var savedProject = {
+  type : 'project-slideshow',
+  owner: null,
+  short_url: null,
+  pages: [],
+  created_on : null
+}
 dbServer.db.get(dbName, function (err) {
   if (err) {
     console.log('Got some error: ' + err);
@@ -152,6 +159,13 @@ function addDefaultData() {
             emit(doc.owner, doc);
           }
         }
+      },
+      'saved_projects': {
+        'map': function (doc) {
+          if(doc.type=='project-slideshow') {
+            emit(doc.short_url, doc);
+          }
+        }
       }
     }
   };
@@ -177,6 +191,10 @@ exports.getUserModel = function () {
 exports.getProjectModel = function () {
   return JSON.parse(JSON.stringify(project));
 }
+exports.getSlideshowModel = function () {
+  return JSON.parse(JSON.stringify(savedProject));
+}
+
 /* Get user/users by various keys */
 
 exports.getUser = function (email, callback) {
@@ -188,7 +206,36 @@ exports.getUser = function (email, callback) {
     }
   });
 }
+exports.filterUsers = function (query, callback) {
+  // if query is abc , startkey = abc, endkey = abd;
+  var startKey = query
+    , nextLastChar = String.fromCharCode(startKey.charCodeAt(startKey.length-1)+1)
+    , endKey
+    ;
 
+  //  check if nextLastChar is DEL. This resulted from a query that ends in "~"
+  if(nextLastChar.charCodeAt(0) == 127){
+    endKey = startKey +" ";
+  } else {
+    endKey = startKey.substring(0,startKey.length-1);
+    endKey = endKey+nextLastChar;
+  }
+  // this encoded spaces and other characters to %20 and fucked the search up.
+  // startKey = encodeURIComponent(startKey);
+  // endKey = encodeURIComponent(endKey);
+  // console.log(startKey, endKey);
+  activeDb.view('multiauth-views','users_key_email',{startkey: startKey, endkey: endKey},function (err,body){
+    if(!err){
+      // remove user's selected brands from results
+      // var result = body.rows.map(excludeSelectedBrands);
+      // callback(result);
+      // console.log(body.rows);
+      callback(body.rows);
+    } else {
+      callback([]);
+    }
+  });
+}
 exports.getUserById = function (id, callback) {
   db.view('multiauth-views', 'users_key_id', {key: id}, function (err, body) {
     if(!err && body.rows.length) {
@@ -229,7 +276,15 @@ exports.getUserByGoogleId = function (google_id, callback) {
 /* END Get user/users by various keys */
 
 /* Get projects */
-
+exports.getSavedProject = function (url, callback) {
+  db.view('cose-views', 'saved_projects', {key: url}, function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows[0].value);
+    } else {
+      callback(null);
+    }
+  });
+}
 exports.getProject = function (url, callback) {
   db.view('cose-views', 'projects', {key: url}, function (err, body){
     if(!err && body.rows.length) {

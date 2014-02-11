@@ -181,6 +181,10 @@ exports.connection = function (socket){
   });
 
   socket.on('new-page', function (data){
-    
+    socket.broadcast.to(data.b).emit('new-page', data);
+  });
+  
+  socket.on('stop-drawing-monkeys', function (data){
+    socket.broadcast.to(data.b).emit('new-page', data);
   });
 } 

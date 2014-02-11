@@ -77,6 +77,7 @@ app.post('/signup', auth.signupEmail);
 // create new storyboard 
 app.post('/create', auth.isAuthenticatedPOST, storyboards.create);
 
+app.post('/saveProject', auth.isAuthenticatedPOST, storyboards.save);
 
 // sockets
 
