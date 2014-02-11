@@ -9,7 +9,8 @@ $(document).ready(function(){
     , canvas = new fabric.Canvas('canvas',{
         width: 800,
         height: 500,
-        selection: false
+        selection: false,
+        background: rgba(255,255,255,1)
       })
     , actionCreate   = null
     , selectedColor  = "#000000"
@@ -760,7 +761,7 @@ $(document).ready(function(){
   $(document).on('click', '.slide', function(){
     var lastSlide = $(selectedPage);
     selectedPage = $(this).attr('id');
-    $('.slide-active').removeClass('.slide-active');
+    $('.slide-active').removeClass('slide-active');
     $(this).addClass('slide-active');
 
     updateCanvas();

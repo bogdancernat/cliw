@@ -408,9 +408,6 @@ header{
   margin-top: 4px;
 }
 
-.slide-active {
-  background-color: #f3f3f3;
-}
 
 @footer_height: 55px;
 @width_new_slide: 60px;
@@ -468,6 +465,9 @@ footer{
         position: relative;
         cursor: pointer;
         
+        &.slide-active {
+          background-color: #f3f3f3;
+        }
         .glyphicon-trash{
           display: block;
           position: absolute;
