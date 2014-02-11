@@ -812,7 +812,6 @@ $(document).ready(function(){
     $(newSlide).addClass('slide');
     $(newSlide).attr('id',newId);
     $('.slides ul').append(newSlide);
-    console.log($('.slide'));
     var slide_width = $('.slide').width();
     $('.slides ul').css('width',($('.slide').length  + 5)* slide_width+'px');
     sly.reload();

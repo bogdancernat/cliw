@@ -23,10 +23,13 @@ exports.index = function(req, res){
           name: p.value.name
         });
       }
-      
-      res.render('index', { 
-        title: 'Cosé - Collaborative board',
-        data : data 
+      db.getSavedProjects(function (savedProjects){
+        data.savedProjects = savedProjects;
+        console.log(savedProjects);
+        res.render('index', { 
+          title: 'Cosé - Collaborative board',
+          data : data 
+        });
       });
     });
   } else {

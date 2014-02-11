@@ -13,42 +13,18 @@ block content
           div.mousearea
         div.frame.smart#smart
           ul.items
-            li.prj
-              div.prj-wrap-title
-                a(href="#").glyphicon.glyphicon-play-circle.prj-play
-                p.prj-title 
-                  a(href='#') 
-                    | Primul Nostru proiect LoL
-                    span.date 08-12-2014 
-              div.prj-capture
-                img(src="http://placehold.it/800x500")
-            li.prj
-              div.prj-wrap-title
-                a(href="#").glyphicon.glyphicon-play-circle.prj-play
-                p.prj-title 
-                  a(href='#')
-                    | Primul Nostru proiect LoL
-                    span.date 08-12-2014 
-              div.prj-capture
-                img(src="http://placehold.it/800x500")
-            li.prj
-              div.prj-wrap-title
-                a(href="#").glyphicon.glyphicon-play-circle.prj-play
-                p.prj-title 
-                  a(href='#')
-                    | Primul Nostru proiect LoL
-                    span.date 08-12-2014 
-              div.prj-capture
-                img(src="http://placehold.it/800x500")
-            li.prj
-              div.prj-wrap-title
-                a(href="#").glyphicon.glyphicon-play-circle.prj-play
-                p.prj-title 
-                  a(href='#')
-                    | Primul Nostru proiect LoL
-                    span.date 08-12-2014 
-              div.prj-capture
-                img(src="http://placehold.it/800x500")
+            each project in data.savedProjects
+              li.prj
+                div.prj-wrap-title
+                  a(href="/preview/?b="+project.value.short_url).glyphicon.glyphicon-play-circle.prj-play
+                  p.prj-title 
+                    a(href='/preview/?b='+project.value.short_url)
+                      =project.value.name
+                      //- span.date 08-12-2014 
+                div.prj-capture
+                  a(href='/preview/?b='+project.value.short_url)
+                    img(src=project.value.pages[0])
+            
            
     div.storyboard-filters
       div.prj-filters

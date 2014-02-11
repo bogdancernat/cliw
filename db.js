@@ -36,6 +36,7 @@ var project = {
   type         : 'project',
   owner        : null,
   short_url    : null,
+  name         : null,
   collaborators: [],
   closed       : false,
   active       : false,
@@ -44,11 +45,12 @@ var project = {
 }
 
 var savedProject = {
-  type : 'project-slideshow',
-  owner: null,
-  short_url: null,
-  pages: [],
-  created_on : null
+  type      : 'project-slideshow',
+  owner     : null,
+  short_url : null,
+  pages     : [],
+  name      : null,
+  created_on: null
 }
 dbServer.db.get(dbName, function (err) {
   if (err) {
@@ -282,6 +284,15 @@ exports.getSavedProject = function (url, callback) {
       callback(body.rows[0].value);
     } else {
       callback(null);
+    }
+  });
+}
+exports.getSavedProjects = function (callback) {
+  db.view('cose-views', 'saved_projects', function (err, body){
+    if(!err && body.rows.length) {
+      callback(body.rows);
+    } else {
+      callback([]);
     }
   });
 }
