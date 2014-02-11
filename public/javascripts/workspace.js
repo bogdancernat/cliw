@@ -737,6 +737,17 @@ $(document).ready(function(){
     $(this).find('span').remove();
   });
   
+  socket.on('new-page', function (data){
+    var newSlide = document.createElement('li');
+    
+    $(newSlide).addClass('slide');
+    $(newSlide).attr('id',data.page_id);
+    $('.slides ul').append(newSlide);
+    var slide_width = $('.slide').width();
+    $('.slides ul').css('width',($('.slide').length  + 5)* slide_width+'px');
+    sly.reload();
+  });
+
   $(document).on('click', '.new-slide', function(){
     $('.slide-active').removeClass('.slide-active');
     $(this).addClass('slide-active');
