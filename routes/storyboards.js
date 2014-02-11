@@ -28,11 +28,16 @@ exports.save = function (req, res){
     slideshow.owner = req.user._id;
     slideshow.short_url = req.body.short_url;
     slideshow.pages = JSON.parse(req.body.data);
-    db.getProjectMinimal(req.body.short_url, function (project_details){
+    db.getProject(req.body.short_url, function (project_details){
+
       slideshow.name = project_details.name;
+      project_details.closed = true;      
       db.insert(slideshow, function (resp){
-        res.send(200);
+        db.update(project_details, project_details._id, function (respUpdate){
+          res.send(200);
+        });
       });
+
     });
   }
 }
