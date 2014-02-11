@@ -8,7 +8,8 @@ $(document).ready(function(){
     , socket = io.connect('http://localhost')
     , canvas = new fabric.Canvas('canvas',{
         width: 800,
-        height: 500
+        height: 500,
+        selection: false
       })
     , actionCreate   = null
     , selectedColor  = "#000000"
@@ -90,6 +91,20 @@ $(document).ready(function(){
     canvas.renderAll();
   });
 
+  socket.on('update-new-object-circle', function (data){
+    var o = canvasObjects[data.socket_id][data.id];
+    o.set('radius',data.radius);
+    o.setCoords();
+    canvas.renderAll();
+  });
+
+  socket.on('update-new-object-triangle', function (data){
+    var o = canvasObjects[data.socket_id][data.id];
+    o.set('width',data.width).set('height',data.height);
+    o.setCoords();
+    canvas.renderAll();
+  });
+
   socket.on('update-new-object-line', function (data){
     var o = canvasObjects[data.socket_id][data.id];
     o.set('x2',data.x2).set('y2',data.y2);
@@ -150,12 +165,21 @@ $(document).ready(function(){
     $('.tools').children().click(function (e){
       var f = $(this).attr('data-tool');
       if(actionCreate == f){
+        if(f == 'freeDraw'){
+          canvas.isDrawingMode =false;
+        }
         resetTool();
       } else {
         $('.tools').children().removeClass('selected');
-        canvas.selection = false;
         actionCreate = f;
         $(this).addClass('selected');
+        if(actionCreate == 'freeDraw'){
+          canvas.isDrawingMode = true;
+          canvas.freeDrawingBrush = new fabric.PencilBrush(canvas);
+          canvas.freeDrawingBrush.color = selectedColor;
+          canvas.freeDrawingBrush.width = 3;
+          canvas.freeDrawingBrush.shadowBlur = 0;
+        }
       }
     });
     
@@ -184,6 +208,14 @@ $(document).ready(function(){
         changeBorderActiveObject();
       }
 
+      if (a == 'bring-front') {
+        bringActiveToFront();
+      }
+
+      if (a == 'push-back') {
+        pushActiveToBack();
+      }
+
     });
 
   }
@@ -192,13 +224,26 @@ $(document).ready(function(){
     // rect1.scaleX = d.target.scaleX;
     // rect1.scaleY = d.target.scaleY;
     // rect1.setCoords();
-    socket.emit('resize-object',{
-      id: d.target.id,
-      b: queries.b,
-      socket_id: d.target.socket_id,
-      scaleX: d.target.scaleX,
-      scaleY: d.target.scaleY
-    });
+    if(d.target.objects){
+      console.log(d);
+      for (var i = 0; i < d.target.objects.length; i++) {
+        socket.emit('resize-object',{
+          id: d.target.objects[i].id,
+          b: queries.b,
+          socket_id: d.target.objects[i].socket_id,
+          scaleX: d.target.objects[i].scaleX,
+          scaleY: d.target.objects[i].scaleY
+        });
+      };
+    } else {
+      socket.emit('resize-object',{
+        id: d.target.id,
+        b: queries.b,
+        socket_id: d.target.socket_id,
+        scaleX: d.target.scaleX,
+        scaleY: d.target.scaleY
+      });
+    }
   });
 
   canvas.on("object:rotating", function (d){
@@ -231,6 +276,49 @@ $(document).ready(function(){
   canvas.on("mouse:move", drawElement);
   canvas.on("mouse:up", placeElement);
 
+  canvas.on("path:created", function (){
+    for (var i = 0; i < this._objects.length; i++) {
+      if(this._objects[i].id == undefined){
+        // delete this._objects[i];
+        var saved = JSON.parse(JSON.stringify(this._objects[i]));
+        var obj = new fabric.Path(saved.path,{
+          id: genId(),
+          strokeWidth: 3,
+          strokeLineCap: "round",
+          strokeLineJoin: "round",
+          fill: null,
+          stroke: selectedColor,
+          originX: "center",
+          originY: "center",
+          centeredRotation: true,
+          centeredScaling: true,
+          top: saved.top - saved.height/2,
+          left: saved.left - saved.width/2
+        });
+        obj.setCoords();
+        canvas.add(obj);
+        if(typeof canvasObjects[obj.socket_id] !== "object"){
+          canvasObjects[obj.socket_id] = {};
+        }
+        canvasObjects[obj.socket_id][obj.id] = obj;
+
+        socket.emit('new-object', {
+          id: obj.id, 
+          b: queries.b,
+          socket_id: obj.socket_id, 
+          data: JSON.stringify(obj)
+        });
+
+        canvas.setActiveObject(obj);
+        canvas.renderAll();
+        this._objects.splice(i,1);
+        break;
+      }
+    };
+    canvas.isDrawingMode = false;
+    resetTool();
+  });
+
   function prepareDrawingElement (e){
     var mouse = canvas.getPointer(e.e);
     x = mouse.x;
@@ -239,6 +327,49 @@ $(document).ready(function(){
     if(actionCreate == 'drawRect'){
 
       obj = new fabric.Rect({
+        id: genId(),
+        left: x,
+        top: y,
+        fill: "rgba(0,0,0,0)",
+        stroke: selectedColor,
+        strokeWidth: 2,
+        width: 0,
+        height: 0,
+        centeredRotation: true,
+        centeredScaling: true,
+        originX: 'center',
+        originY: 'center'
+      });
+
+      obj.setCoords();
+      canvas.add(obj);
+      startedDrawing = true;
+      canvas.setActiveObject(obj);
+    } 
+
+    if(actionCreate == 'drawCircle'){
+      obj = new fabric.Circle({
+        id: genId(),
+        left: x,
+        top: y,
+        fill: "rgba(0,0,0,0)",
+        stroke: selectedColor,
+        strokeWidth: 2,
+        radius: 0,
+        centeredRotation: true,
+        centeredScaling: true,
+        originX: 'center',
+        originY: 'center'
+      });
+
+      obj.setCoords();
+      canvas.add(obj);
+      startedDrawing = true;
+      canvas.setActiveObject(obj);
+    }
+
+    if(actionCreate == 'drawTriangle'){
+      obj = new fabric.Triangle({
         id: genId(),
         left: x,
         top: y,
@@ -276,6 +407,15 @@ $(document).ready(function(){
       canvas.setActiveObject(obj);
     }
 
+    // if(actionCreate == 'freeDraw'){
+    //   startedDrawing = true;
+    //   canvas.isDrawingMode = true;
+    //   obj = new fabric.PencilBrush(canvas);
+    //   obj.color = selectedColor;
+    //   obj.width = 3;
+    //   obj.shadowBlur = 0;
+    // }
+
     if(startedDrawing){
       if(typeof canvasObjects[obj.socket_id] !== "object"){
         canvasObjects[obj.socket_id] = {};
@@ -288,8 +428,8 @@ $(document).ready(function(){
         data: JSON.stringify(obj)
       });
     }
-
   }
+
   function drawElement (e){
     if(!startedDrawing){
       return false;
@@ -318,6 +458,49 @@ $(document).ready(function(){
       canvas.renderAll();
     }
 
+    if(actionCreate == 'drawTriangle'){
+      var w = Math.abs(mouse.x - x)
+        , h = Math.abs(mouse.y - y)
+        ;
+      if(!w || !h){
+        return false;
+      } 
+      var obj = canvas.getActiveObject();
+      obj.set('width',2*w).set('height',2*h);
+      obj.setCoords();
+
+      socket.emit('update-new-object-triangle', {
+        id: obj.id, 
+        b: queries.b,
+        socket_id: mySocket,
+        width: 2*w,
+        height: 2*h
+      });
+      canvas.renderAll();
+    }
+
+
+    if(actionCreate == 'drawCircle'){
+      var w = Math.abs(mouse.x - x)
+        , h = Math.abs(mouse.y - y)
+        , r = ((w>h)?w:h)/2
+        ;
+      if(!w || !h){
+        return false;
+      } 
+      var obj = canvas.getActiveObject();
+      obj.set('radius',r);
+      obj.setCoords();
+
+      socket.emit('update-new-object-circle', {
+        id: obj.id, 
+        b: queries.b,
+        socket_id: mySocket,
+        radius: r
+      });
+      canvas.renderAll();
+    }
+
     if(actionCreate == 'drawLine'){
       var obj = canvas.getActiveObject();
       obj.set('x2',mouse.x).set('y2',mouse.y);
@@ -334,6 +517,45 @@ $(document).ready(function(){
     }
   }
 
+  function placeElement (e){
+    if(!startedDrawing){
+      return false;
+    }
+    if(actionCreate == 'drawRect'){
+      var obj = canvas.getActiveObject();
+      startedDrawing = false;
+      obj.setCoords();
+      canvas.renderAll();
+      resetTool();
+    }
+    if(actionCreate == 'drawTriangle'){
+      var obj = canvas.getActiveObject();
+      startedDrawing = false;
+      obj.setCoords();
+      canvas.renderAll();
+      resetTool();
+    }
+    if(actionCreate == 'drawCircle'){
+      var obj = canvas.getActiveObject();
+      startedDrawing = false;
+      obj.setCoords();
+      canvas.renderAll();
+      resetTool();
+    }
+    if(actionCreate == 'drawLine'){
+      var obj = canvas.getActiveObject();
+      startedDrawing = false;
+      obj.setCoords();
+      canvas.renderAll();
+      resetTool();
+    }
+    if(actionCreate == 'freeDraw'){
+      canvas.isDrawingMode = false;
+      startedDrawing = false;
+      // canvas.renderAll();
+      resetTool();
+    }
+  }
 
   function fillActiveObject(){
     var o = canvas.getActiveObject();
@@ -376,31 +598,38 @@ $(document).ready(function(){
     delete canvasObjects[o.socket_id][o.id];
     canvas.renderAll();
   }
+
+  function bringActiveToFront(){
+    var o = canvas.getActiveObject();
+
+    canvas.bringForward(o);
+
+    socket.emit('bring-front',{
+      id: o.id,
+      b: queries.b,
+      socket_id: o.socket_id
+    });
+    // canvas.renderAll();
+  }
+
+  function pushActiveToBack(){
+    var o = canvas.getActiveObject();
+    console.log(JSON.parse(JSON.stringify(o)))
+    canvas.sendBackwards(o);
+    console.log(o);
+    socket.emit('push-back',{
+      id: o.id,
+      b: queries.b,
+      socket_id: o.socket_id
+    });
+    // canvas.renderAll();
+  }
+
   function resetTool(){
     actionCreate = null;
-    canvas.selection = true;
     $('.tools').children().removeClass('selected');
   }
 
-  function placeElement (e){
-    if(!startedDrawing){
-      return false;
-    }
-    if(actionCreate == 'drawRect'){
-      var obj = canvas.getActiveObject();
-      startedDrawing = false;
-      obj.setCoords();
-      canvas.renderAll();
-      resetTool();
-    }
-    if(actionCreate == 'drawLine'){
-      var obj = canvas.getActiveObject();
-      startedDrawing = false;
-      obj.setCoords();
-      canvas.renderAll();
-      resetTool();
-    }
-  }
 
   function genId(){
     lastId++;

@@ -88,6 +88,22 @@ exports.connection = function (socket){
     }
   });
 
+  socket.on('update-new-object-circle', function (data){
+    if (data.b){
+      canvases[data.b]['must_sync'] = true;
+      canvases[data.b]['objects'][data.socket_id][data.id].radius = data.radius;
+      socket.broadcast.to(data.b).emit('update-new-object-circle', data);
+    }
+  });
+  socket.on('update-new-object-triangle', function (data){
+    if (data.b){
+      canvases[data.b]['must_sync'] = true;
+      canvases[data.b]['objects'][data.socket_id][data.id].width = data.width;
+      canvases[data.b]['objects'][data.socket_id][data.id].height = data.height;
+      socket.broadcast.to(data.b).emit('update-new-object-triangle', data);
+    }
+  });
+  
   socket.on('update-new-object-line', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
