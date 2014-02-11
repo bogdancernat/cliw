@@ -167,6 +167,169 @@ header{
     }
   }
 
+  .rectangle {
+    i {
+      display: block;
+      // background-color: #000;
+      border: 2px solid #000;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+    }
+  }
+  .circle {
+    i {
+      display: block;
+      // background-color: #000;
+      border: 2px solid #000;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      border-radius: 50%;
+    }
+  }
+  .triangle {
+    i {
+      display: block;
+      // background-color: #000;
+      // border: 3px solid darkslategray;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/triangle.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
+      // border-radius: 50%;
+      // -webkit-text-stroke: 3px darkslategray;
+      // color : transparent;
+      // font-size:150%;
+      // margin: 10%;
+      // display: block;
+      // width: 0;
+      // height: 0;
+      // border-style: solid;
+      // border-width: 0 12px 22px 12px;
+      // border-color: transparent transparent darkslategray transparent;
+      // margin: 3px;
+    }
+  }
+   .line {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/line.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+  }
+  .free-draw {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/pen.png');
+      background-size: 180%;
+      background-position: center;
+
+      background-repeat: no-repeat;
+    }
+  }
+  .text {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/text.png');
+      background-size: 100%;
+      background-position: center;
+
+      background-repeat: no-repeat;
+    }
+  }
+
+  .fill {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/fill.png');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+
+   .border {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/border.png');
+      background-size: 120%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .bring-front {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/front.png');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .push-back {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/back.png');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .remove {
+    i {
+      display: block;
+      width: 70%;
+      height: 70%;
+      margin: 15%;
+      box-sizing: border-box;
+      background-image: url('../images/remove.png');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  }
+
+
+
+
   .actions{
     span{
       width: 30px;
@@ -177,6 +340,10 @@ header{
         box-shadow: 0px 0px 3px darkslategray;
         margin: 0;
         
+      }
+      &.remove {
+        float: right;
+        margin-right: 25px;
       }
     }
   }
@@ -289,6 +456,7 @@ footer{
         margin-right: 4px;
         box-shadow: 0px 0px 2px @gray-dark;
         position: relative;
+        cursor: pointer;
 
         .glyphicon-trash{
           display: block;
