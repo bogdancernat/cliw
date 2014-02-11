@@ -4,35 +4,39 @@ block content
   div.wrapper
     div.storyboard-listing
       div.input-wrapper
-        input(type="text").form-control#new-storyboard
+        input(type="text", placeholder="Type your new project name").form-control#new-storyboard
         button().btn.btn-primary#create-storyboard
           | +
       div.wrap
-        div.scrollbar
-          div.handle
-          div.mousearea
-        div.frame.smart#smart
-          ul.items
-            each project in data.savedProjects
-              li.prj
-                div.prj-wrap-title
-                  a(href="/preview/?b="+project.value.short_url).glyphicon.glyphicon-play-circle.prj-play
-                  p.prj-title 
+        if (data.savedProjects.length)
+          div.scrollbar
+            div.handle
+            div.mousearea
+          div.frame.smart#smart
+            ul.items
+              each project in data.savedProjects
+                li.prj
+                  div.prj-wrap-title
+                    a(href="/preview/?b="+project.value.short_url).glyphicon.glyphicon-play-circle.prj-play
+                    p.prj-title 
+                      a(href='/preview/?b='+project.value.short_url)
+                        =project.value.name
+                        //- span.date 08-12-2014 
+                  div.prj-capture
                     a(href='/preview/?b='+project.value.short_url)
-                      =project.value.name
-                      //- span.date 08-12-2014 
-                div.prj-capture
-                  a(href='/preview/?b='+project.value.short_url)
-                    img(src=project.value.pages[0])
+                      img(src=project.value.pages[0])
+        else
+          h3 You have no projects here
+          h4 Why not create one?
             
            
     div.storyboard-filters
-      div.prj-filters
+      //- div.prj-filters
         //- div.prj-by-name
         //-   input(type="text", placeholder="type a project name").form-control#stb-filter-name
         //- div.prj-by-date
         //-   input(type="date").form-control#stb-filter-date
-      hr
+      //- hr
       div.user-alerts
         div.scrollbar2
           div.handle2
