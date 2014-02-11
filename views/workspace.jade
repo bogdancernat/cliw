@@ -24,14 +24,14 @@ body
             span.icon-bar
             span.icon-bar
             span.icon-bar
-      div.users
-        div.add-new-user.glyphicon.glyphicon-user
-        div.user-bubble.active
-        div.user-bubble
-        div.user-bubble.active
+      //- div.users
+      //-   div.add-new-user.glyphicon.glyphicon-user
+      //-   div.user-bubble.active
+      //-   div.user-bubble
+      //-   div.user-bubble.active
     nav.canvas-tools
       div.colors
-        span(data-color="#4558fd")
+        span(data-color="rgba(0,0,0,0)")
         span(data-color="#ffffff")
         span(data-color="#000000")
         span(data-color="#ff1122")
@@ -51,48 +51,48 @@ body
         span(data-color="#6fd7af")
       hr
       div.tools
-        span(data-tool="freeDraw" title="Free draw").free-draw
+        span(data-tool="freeDraw", title="Free draw").free-draw
           i
-        span(data-tool="drawRect" title="Draw rectangle").rectangle
+        span(data-tool="drawRect", title="Draw rectangle").rectangle
           i
-        span(data-tool="drawCircle" title="Draw circle").circle
+        span(data-tool="drawCircle", title="Draw circle").circle
           i
-        span(data-tool="drawTriangle" title="Draw triangle").triangle
+        span(data-tool="drawTriangle", title="Draw triangle").triangle
           i
-        span(data-tool="drawLine" title="Draw line").line 
+        span(data-tool="drawLine", title="Draw line").line 
           i
-        span(data-tool="drawText" title="Insert text").text
+        span(data-tool="drawText", title="Insert text").text
           i
       hr
       div.actions
-        span(data-action="fill" title="Fill shape").fill
+        span(data-action="fill", title="Fill shape").fill
           i
-        span(data-action="border" title="Add border").border
+        span(data-action="border", title="Add border").border
           i
-        span(data-action="bring-front" title="Bring front").bring-front
+        span(data-action="bring-front", title="Bring front").bring-front
           i
-        span(data-action="push-back" title="Push back").push-back
+        span(data-action="push-back", title="Push back").push-back
           i
-        span(data-action="remove" title="Remove item").remove
+        span(data-action="remove", title="Remove item").remove
           i
       hr
       div.stock-items
         div.item-stk
-          img(src="images/bubble1.png" alt="Insert bubble 1")
+          img(src="images/bubble1.png",data-large="images/bubble1-large.png", data-tool="drawImg", alt="Insert bubble 1").elem-img
         div.item-stk
-          img(src="images/bubble2.png" alt="Insert bubble 2")
+          img(src="images/bubble2.png",data-large="images/bubble2-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
         div.item-stk
-          img(src="images/man.png" alt="Insert bubble 2")
+          img(src="images/man.png",data-large="images/man-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
         div.item-stk
-          img(src="images/femeie.png" alt="Insert bubble 2")
+          img(src="images/femeie.png",data-large="images/femeie-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
         div.item-stk
-          img(src="images/running.png" alt="Insert bubble 2")
+          img(src="images/running.png",data-large="images/running-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
         div.item-stk
-          img(src="images/phone.png" alt="Insert bubble 2")
+          img(src="images/phone.png",data-large="images/phone-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
         div.item-stk
-          img(src="images/ipad.png" alt="Insert bubble 2")
+          img(src="images/ipad.png",data-large="images/ipad-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
         div.item-stk
-          img(src="images/laptop.png" alt="Insert bubble 2")
+          img(src="images/laptop.png",data-large="images/laptop-large.png", data-tool="drawImg", alt="Insert bubble 2").elem-img
 
       button.save-project Save 
     div.workspace-area
