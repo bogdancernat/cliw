@@ -142,7 +142,16 @@ $(document).ready(function(){
     canvas.renderAll();
     
   });
-
+  socket.on('lock-object', function (data){
+    console.log(data);
+    var o = canvasObjects[data.socket_id][data.id];
+    o.selectable = false;
+  });
+  socket.on('unlock-object', function (data){
+    console.log(data);
+    var o = canvasObjects[data.socket_id][data.id];
+    o.selectable = true;
+  })
   socket.on('meta-object', function (data){
     var o = canvasObjects[data.socket_id][data.id];
     for(key in data.meta_data){
@@ -257,6 +266,7 @@ $(document).ready(function(){
       top: d.target.top
     });
   });
+
   canvas.on("object:moving", function (d){
     socket.emit('move-object',{
       id: d.target.id,
@@ -269,7 +279,21 @@ $(document).ready(function(){
   });
   
   canvas.on("object:selected", function (d){
+    var o = d.target;
+    canvas.lastSelected = {
+      id: d.target.id,
+      b: queries.b,
+      socket_id: d.target.socket_id
+    };
+    socket.emit('lock-object', {
+      id: d.target.id,
+      b: queries.b,
+      socket_id: d.target.socket_id,
+    });
+  });
 
+  canvas.on("selection:cleared", function (d){
+    socket.emit('unlock-object', canvas.lastSelected);
   });
 
   canvas.on("mouse:down", prepareDrawingElement);

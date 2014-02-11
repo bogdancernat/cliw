@@ -153,6 +153,14 @@ exports.connection = function (socket){
     }
   });
 
+  socket.on('lock-object', function (data){
+    socket.broadcast.to(data.b).emit('lock-object', data);
+  });
+
+  socket.on('unlock-object', function (data){
+    socket.broadcast.to(data.b).emit('unlock-object', data);
+  });
+
   socket.on('remove-object', function (data){
     if (data.b){
       canvases[data.b]['must_sync'] = true;
