@@ -1,10 +1,10 @@
-var canvasObjects = {};
 
 $(document).ready(function(){
   resizeElements();
 
   var mySocket
     , lastId = 0
+    , canvasObjects = {}
     , socket = io.connect('http://localhost')
     , canvas = new fabric.Canvas('canvas',{
         width: 800,
@@ -21,6 +21,7 @@ $(document).ready(function(){
     , selectedPage   = "page1"
     , imgSelected    = ''
     ;
+
 
   $('.colors').children().each(function (i, elem){
     $(elem).css('background',$(elem).attr('data-color'));
