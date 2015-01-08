@@ -26,6 +26,7 @@ var express    = require('express')
   , storyboards = require('./routes/storyboards')
   , preview     = require('./routes/preview')
   , workspace   = require('./routes/workspace')
+  , less        = require('less-middleware')
   ;
 
 
@@ -36,11 +37,8 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(express.favicon());
   app.use(express.logger('dev'));
-  app.use(require('less-middleware')({ 
-    src: __dirname + '/public/',
-    compress: true,
-    optimization: 2 
-  }));
+  
+  app.use(less(path.join(__dirname, 'public')));
   app.use(express.static(path.join(__dirname, 'public')));
   app.use(express.cookieParser('cookieSecret!'));
   app.use(express.bodyParser());
